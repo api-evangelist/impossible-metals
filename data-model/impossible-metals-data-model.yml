@@ -1,0 +1,105 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  openapi/*.yml (schemas read from the site's own OPTIONS documents) + live record inspection on
+  2026-08-23. Impossible Metals publishes no object reference, so the entities and relationships below
+  are derived from the contract, not from documentation.
+entities:
+- name: Post
+  rest_base: /wp/v2/posts
+  count_at_capture: 247
+  identifier: {field: id, type: integer, scheme: WordPress auto-increment post ID}
+  key_fields: [id, date, date_gmt, modified, slug, status, link, title, content, excerpt, author, featured_media, categories, tags]
+  description: Blog posts, press releases and congressional testimony on the Eureka programme, deep-sea mining policy and partnerships.
+- name: Page
+  rest_base: /wp/v2/pages
+  count_at_capture: 93
+  identifier: {field: id, type: integer, scheme: WordPress auto-increment post ID}
+  key_fields: [id, date, modified, slug, status, link, title, content, excerpt, parent, menu_order, author, featured_media]
+  description: Static technology, sustainability, about, markets, partners and policy pages.
+- name: FaqEntry
+  rest_base: /wp/v2/avada_faq
+  count_at_capture: 141
+  identifier: {field: id, type: integer, scheme: WordPress auto-increment post ID}
+  key_fields: [id, date, modified, slug, status, link, title, content, faq_category]
+  description: >-
+    The company's structured answers on nodule collection, environmental impact, regulation and the AUV.
+    A custom post type registered by the Avada theme, but the content is entirely Impossible Metals'.
+- name: FaqCategory
+  rest_base: /wp/v2/faq_category
+  count_at_capture: 11
+  identifier: {field: id, type: integer, scheme: WordPress term ID}
+  key_fields: [id, count, description, link, name, slug, taxonomy, parent]
+  description: Taxonomy grouping the FAQ knowledge base by subject.
+- name: MediaItem
+  rest_base: /wp/v2/media
+  count_at_capture: 727
+  identifier: {field: id, type: integer, scheme: WordPress auto-increment attachment ID}
+  key_fields: [id, date, modified, slug, link, title, author, media_type, mime_type, source_url, media_details, alt_text, post]
+  description: Eureka vehicle photography, seabed and nodule imagery, technical diagrams, report PDFs and press assets.
+- name: Category
+  rest_base: /wp/v2/categories
+  count_at_capture: 16
+  identifier: {field: id, type: integer, scheme: WordPress term ID}
+  key_fields: [id, count, description, link, name, slug, taxonomy, parent]
+  description: Post category vocabulary.
+- name: Tag
+  rest_base: /wp/v2/tags
+  count_at_capture: 2
+  identifier: {field: id, type: integer, scheme: WordPress term ID}
+  key_fields: [id, count, description, link, name, slug, taxonomy]
+  description: Post tag vocabulary.
+- name: Author
+  rest_base: /wp/v2/users
+  count_at_capture: 8
+  identifier: {field: id, type: integer, scheme: WordPress user ID}
+  key_fields: [id, name, url, description, link, slug, avatar_urls]
+  description: >-
+    Users with published content. Only the public projection is exposed anonymously — no email address
+    and no role is returned without authentication.
+- name: Event
+  rest_base: /wp-json/tribe/events/v1/events
+  count_at_capture: 0
+  identifier: {field: id, type: integer, scheme: WordPress post ID}
+  key_fields: [id, global_id, title, description, url, start_date, end_date, timezone, all_day, venue, organizer, categories, tags]
+  description: >-
+    Conference appearances, webinars and demo days. The forward-looking window returned 0 events on
+    2026-08-23 — the calendar is populated with venues and organizers but has no upcoming entries.
+- name: Venue
+  rest_base: /wp-json/tribe/events/v1/venues
+  count_at_capture: 40
+  identifier: {field: id, type: integer, scheme: WordPress post ID}
+  key_fields: [id, global_id, venue, address, city, country, province, zip, phone, website, geo_lat, geo_lng]
+  description: Physical locations attached to events.
+- name: Organizer
+  rest_base: /wp-json/tribe/events/v1/organizers
+  count_at_capture: 22
+  identifier: {field: id, type: integer, scheme: WordPress post ID}
+  key_fields: [id, global_id, organizer, phone, website, email]
+  description: Organizations running the events Impossible Metals appears at.
+relationships:
+- {from: Post, to: Author, type: belongs_to, via: author}
+- {from: Post, to: MediaItem, type: has_one, via: featured_media}
+- {from: Post, to: Category, type: has_many, via: categories}
+- {from: Post, to: Tag, type: has_many, via: tags}
+- {from: Page, to: Author, type: belongs_to, via: author}
+- {from: Page, to: MediaItem, type: has_one, via: featured_media}
+- {from: Page, to: Page, type: belongs_to, via: parent}
+- {from: FaqEntry, to: FaqCategory, type: has_many, via: faq_category}
+- {from: FaqCategory, to: FaqCategory, type: belongs_to, via: parent}
+- {from: Category, to: Category, type: belongs_to, via: parent}
+- {from: MediaItem, to: Post, type: belongs_to, via: post}
+- {from: MediaItem, to: Author, type: belongs_to, via: author}
+- {from: Event, to: Venue, type: has_one, via: venue}
+- {from: Event, to: Organizer, type: has_many, via: organizer}
+traversal:
+  mechanism: _links + _embed
+  note: >-
+    Every record carries an _links block (HAL-ish, not HAL-conformant) naming the routes for its author,
+    featured media, terms, replies and versions. Adding ?_embed inlines those under _embedded, which lets
+    an agent resolve a post's author, image and taxonomy terms in one request instead of four.
+id_prefixes: []
+id_note: >-
+  All identifiers are bare integers with no type prefix and no global uniqueness across entity types —
+  post 1234 and term 1234 are unrelated. The events surface additionally exposes a `global_id` of the form
+  impossiblemetals.com?id=<n>, which is the only site-scoped identifier on the surface.

@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: Impossible Metals oEmbed API
+  version: wp/v2
+  description: Public, unauthenticated oEmbed 1.0 provider for impossiblemetals.com. Returns oEmbed rich/link responses
+    in JSON or XML for any URL on the site, so third-party surfaces can embed Impossible Metals posts and pages.
+  contact:
+    name: Impossible Metals
+    url: https://impossiblemetals.com/contact/
+  x-derived-from: https://impossiblemetals.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Impossible Metals publishes no developer program. This document describes
+    the anonymously readable WordPress REST content API served from impossiblemetals.com. Every path, parameter
+    and schema was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing
+    is invented.
+servers:
+- url: https://impossiblemetals.com/wp-json
+  description: Impossible Metals WordPress REST API
+tags:
+- name: oEmbed
+  description: oEmbed 1.0 provider endpoint.
+paths:
+  /oembed/1.0/embed:
+    get:
+      operationId: getOembed
+      summary: Get an oEmbed response
+      description: Retrieve the oEmbed response for a URL on impossiblemetals.com.
+      tags:
+      - oEmbed
+      parameters:
+      - name: url
+        in: query
+        description: The URL of the resource for which to fetch oEmbed data.
+        schema:
+          type: string
+          format: uri
+        required: true
+      - name: format
+        in: query
+        description: The format parameter.
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        description: The maxwidth parameter.
+        schema:
+          default: 600
+      responses:
+        '200':
+          description: Get an oEmbed response — success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404':
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+components:
+  schemas:
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json
+        with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.

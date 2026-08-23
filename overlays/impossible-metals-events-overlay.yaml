@@ -1,0 +1,62 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Impossible Metals Events API
+  version: '2026-08-23'
+extends: openapi/impossible-metals-events-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: API Evangelist enrichment pipeline. The base document is the provider's own, published verbatim at https://impossiblemetals.com/wp-json/tribe/events/v1/doc.
+  This overlay adds only what we observed; it never rewrites what they published.
+actions:
+- target: $.info
+  description: Record capture provenance and the ownership finding, since info.contact on the sibling tec/v1 document
+    names the plugin vendor rather than the company.
+  update:
+    x-api-evangelist-profile: https://apis.io/provider/impossible-metals/
+    x-api-evangelist-captured: '2026-08-23'
+    x-api-evangelist-ownership: servers[] names https://impossiblemetals.com/wp-json/tribe/events/v1/ — Impossible
+      Metals' own host, describing Impossible Metals' own event, venue and organizer records. The document is generated
+      by The Events Calendar plugin, which is why the sibling /tec/v1/docs names support@theeventscalendar.com as
+      contact. Self-hosted/templated server, not a sibling-product mix-up.
+    x-api-evangelist-note: Impossible Metals does not advertise this contract anywhere on its site. It is served
+      by default and was found by walking the REST route index.
+- target: $.paths./events.get
+  description: Record the live result at capture — the contract describes a collection that is currently empty.
+  update:
+    x-observed-total: 0
+    x-observed-on: '2026-08-23'
+    x-observed-note: The forward-looking window (start_date today, end_date +2y) returned 0 events on 2026-08-23.
+      Venues and organizers are populated; upcoming events are not.
+- target: $.paths./venues.get
+  description: Record the live venue count.
+  update:
+    x-observed-total: 40
+    x-observed-on: '2026-08-23'
+- target: $.paths./organizers.get
+  description: Record the live organizer count.
+  update:
+    x-observed-total: 22
+    x-observed-on: '2026-08-23'
+- target: $.paths.*.get
+  description: Record that reads are anonymous and that this surface paginates in the body rather than in headers,
+    unlike the wp/v2 half of the same site.
+  update:
+    x-anonymous: true
+    x-pagination-style: body (total / total_pages / next_rest_url), NOT X-WP-Total headers
+- target: $.paths.*.post
+  description: Flag the write half as out of the public surface.
+  update:
+    x-anonymous: false
+    x-note: Requires WordPress application-password authentication. Not part of the public surface and not profiled.
+- target: $.paths.*.delete
+  description: Flag the destructive half as out of the public surface.
+  update:
+    x-anonymous: false
+    x-note: Requires WordPress application-password authentication. Not part of the public surface and not profiled.
+- target: $.info
+  description: Note the successor surface, because two generations of this API are served side by side with no deprecation
+    signal.
+  update:
+    x-successor: https://impossiblemetals.com/wp-json/tec/v1 (OpenAPI 3.0.4 at /wp-json/tec/v1/docs) — published
+      but answers 400 missing_experimental_endpoint_acknowledgement anonymously. No Sunset or Deprecation header
+      appears on either surface.

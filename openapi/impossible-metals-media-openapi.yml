@@ -1,0 +1,582 @@
+openapi: 3.1.0
+info:
+  title: Impossible Metals Media API
+  version: wp/v2
+  description: Public, unauthenticated read access to the media library behind impossiblemetals.com (727 attachments
+    at capture on 2026-08-23) — Eureka vehicle photography, seabed and nodule imagery, technical diagrams, report
+    PDFs and press assets, with their generated size variants.
+  contact:
+    name: Impossible Metals
+    url: https://impossiblemetals.com/contact/
+  x-derived-from: https://impossiblemetals.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Impossible Metals publishes no developer program. This document describes
+    the anonymously readable WordPress REST content API served from impossiblemetals.com. Every path, parameter
+    and schema was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing
+    is invented.
+servers:
+- url: https://impossiblemetals.com/wp-json
+  description: Impossible Metals WordPress REST API
+tags:
+- name: Media
+  description: Images, diagrams, PDFs and other attachments with generated size variants.
+paths:
+  /wp/v2/media:
+    get:
+      operationId: listMedia
+      summary: List media
+      description: Retrieve a paginated collection of media attachments. 727 attachments were live at capture.
+      tags:
+      - Media
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to posts published after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_after
+        in: query
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: author
+        in: query
+        description: Limit result set to posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: author_exclude
+        in: query
+        description: Ensure result set excludes posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: before
+        in: query
+        description: Limit response to posts published before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        in: query
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: exclude
+        in: query
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: include
+        in: query
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: search_semantics
+        in: query
+        description: How to interpret the search input.
+        schema:
+          type: string
+          enum:
+          - exact
+      - name: offset
+        in: query
+        description: Offset the result set by a specific number of items.
+        schema:
+          type: integer
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: orderby
+        in: query
+        description: Sort collection by post attribute.
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          default: date
+      - name: parent
+        in: query
+        description: Limit result set to items with particular parent IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: parent_exclude
+        in: query
+        description: Limit result set to all items except those of a particular parent ID.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: search_columns
+        in: query
+        description: Array of column names to be searched.
+        schema:
+          type: array
+          default: []
+          items:
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+            type: string
+      - name: slug
+        in: query
+        description: Limit result set to posts with one or more specific slugs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: status
+        in: query
+        description: Limit result set to posts assigned one or more statuses.
+        schema:
+          type: array
+          default: inherit
+          items:
+            enum:
+            - inherit
+            - private
+            - trash
+            type: string
+      - name: media_type
+        in: query
+        description: Limit result set to attachments of a particular media type or media types.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - image
+            - video
+            - text
+            - application
+            - audio
+      - name: mime_type
+        in: query
+        description: Limit result set to attachments of a particular MIME type or MIME types.
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: List media — success.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the requested per_page size.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+        '400': &id001
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404': &id002
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+  /wp/v2/media/{id}:
+    get:
+      operationId: getMediaItem
+      summary: Get a media item
+      description: Retrieve a single media attachment by its numeric identifier.
+      tags:
+      - Media
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+        required: true
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Get a media item — success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400': *id001
+        '404': *id002
+components:
+  schemas:
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json
+        with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.
+    Attachment:
+      type: object
+      properties:
+        date:
+          type: string
+          description: The date the post was published, in the site's timezone.
+          format: date-time
+        date_gmt:
+          type: string
+          description: The date the post was published, as GMT.
+          format: date-time
+        guid:
+          type: object
+          description: The globally unique identifier for the post.
+          readOnly: true
+          properties:
+            raw:
+              type: string
+              description: GUID for the post, as it exists in the database.
+              readOnly: true
+            rendered:
+              type: string
+              description: GUID for the post, transformed for display.
+              readOnly: true
+        id:
+          type: integer
+          description: Unique identifier for the post.
+          readOnly: true
+        link:
+          type: string
+          description: URL to the post.
+          format: uri
+          readOnly: true
+        modified:
+          type: string
+          description: The date the post was last modified, in the site's timezone.
+          format: date-time
+          readOnly: true
+        modified_gmt:
+          type: string
+          description: The date the post was last modified, as GMT.
+          format: date-time
+          readOnly: true
+        slug:
+          type: string
+          description: An alphanumeric identifier for the post unique to its type.
+        status:
+          type: string
+          description: A named status for the post.
+          enum:
+          - publish
+          - future
+          - draft
+          - pending
+          - private
+          - tribe-ea-success
+          - tribe-ea-failed
+          - tribe-ea-schedule
+          - tribe-ea-pending
+          - tribe-ea-draft
+          - tribe-ignored
+        type:
+          type: string
+          description: Type of post.
+          readOnly: true
+        permalink_template:
+          type: string
+          description: Permalink template for the post.
+          readOnly: true
+        generated_slug:
+          type: string
+          description: Slug automatically generated from the post title.
+          readOnly: true
+        class_list:
+          type: array
+          description: An array of the class names for the post container element.
+          readOnly: true
+          items:
+            type: string
+        title:
+          type: object
+          description: The title for the post.
+          properties:
+            raw:
+              type: string
+              description: Title for the post, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML title for the post, transformed for display.
+              readOnly: true
+        author:
+          type: integer
+          description: The ID for the author of the post.
+        featured_media:
+          type: integer
+          description: The ID of the featured media for the post.
+        comment_status:
+          type: string
+          description: Whether or not comments are open on the post.
+          enum:
+          - open
+          - closed
+        ping_status:
+          type: string
+          description: Whether or not the post can be pinged.
+          enum:
+          - open
+          - closed
+        meta:
+          type: object
+          description: Meta fields.
+          properties:
+            inline_featured_image:
+              type: boolean
+        template:
+          type: string
+          description: The theme file to use to display the post.
+        alt_text:
+          type: string
+          description: Alternative text to display when attachment is not displayed.
+        caption:
+          type: object
+          description: The attachment caption.
+          properties:
+            raw:
+              type: string
+              description: Caption for the attachment, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML caption for the attachment, transformed for display.
+              readOnly: true
+        description:
+          type: object
+          description: The attachment description.
+          properties:
+            raw:
+              type: string
+              description: Description for the attachment, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML description for the attachment, transformed for display.
+              readOnly: true
+        media_type:
+          type: string
+          description: Attachment type.
+          enum:
+          - image
+          - file
+          readOnly: true
+        mime_type:
+          type: string
+          description: The attachment MIME type.
+          readOnly: true
+        media_details:
+          type: object
+          description: Details about the media file, specific to its type.
+          readOnly: true
+        post:
+          type: integer
+          description: The ID for the associated post of the attachment.
+        source_url:
+          type: string
+          description: URL to the original attachment file.
+          format: uri
+          readOnly: true
+        missing_image_sizes:
+          type: array
+          description: List of the missing image sizes of the attachment.
+          readOnly: true
+          items:
+            type: string
+        filename:
+          type: string
+          description: Original attachment file name.
+          readOnly: true
+        filesize:
+          type: integer
+          description: Attachment file size in bytes.
+          readOnly: true
+        exif_orientation:
+          type: integer
+          description: EXIF orientation value. Values 1-8 follow the EXIF specification, where 1 means no rotation
+            needed.
+          readOnly: true
+        image_quality:
+          type: object
+          description: Encode quality (1-100) from the wp_editor_set_quality filter, resolved against the output
+            MIME type. The "default" value applies to the full-size image; "sizes" lists per-registered-size overrides
+            where the filtered value differs from "default".
+          readOnly: true
+          properties:
+            default:
+              type: integer
+            sizes:
+              type: object
+              properties:
+                thumbnail:
+                  type: integer
+                medium:
+                  type: integer
+                medium_large:
+                  type: integer
+                large:
+                  type: integer
+                1536x1536:
+                  type: integer
+                2048x2048:
+                  type: integer
+                blog-large:
+                  type: integer
+                blog-medium:
+                  type: integer
+                recent-posts:
+                  type: integer
+                recent-works-thumbnail:
+                  type: integer
+                fusion-200:
+                  type: integer
+                fusion-400:
+                  type: integer
+                fusion-600:
+                  type: integer
+                fusion-800:
+                  type: integer
+                fusion-1200:
+                  type: integer
+                portfolio-full:
+                  type: integer
+                portfolio-one:
+                  type: integer
+                portfolio-two:
+                  type: integer
+                portfolio-three:
+                  type: integer
+                portfolio-five:
+                  type: integer
+                gform-image-choice-sm:
+                  type: integer
+                gform-image-choice-md:
+                  type: integer
+                gform-image-choice-lg:
+                  type: integer
+        image_output_format:
+          type: string
+          description: The output MIME type this image should be converted to, based on the image_editor_output_format
+            filter. Null if no conversion is needed.
+          readOnly: true
+        image_save_progressive:
+          type: boolean
+          description: Whether to use progressive/interlaced encoding when saving this image.
+          readOnly: true

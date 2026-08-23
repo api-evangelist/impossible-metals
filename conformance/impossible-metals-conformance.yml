@@ -1,0 +1,113 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  openapi/*.yml + live probes of https://impossiblemetals.com/wp-json/* on 2026-08-23. Impossible Metals
+  makes no conformance or compliance claim anywhere on its site, so nothing below is taken from marketing
+  copy — every assertion is read from the contract or the wire.
+standards:
+- id: openapi
+  conforms: true
+  evidence: >-
+    Two OpenAPI documents are published by the provider's own host: OpenAPI 3.0.4 at
+    /wp-json/tec/v1/docs and OpenAPI 3.0.0 at /wp-json/tribe/events/v1/doc, both returning HTTP 200
+    application/json on 2026-08-23, both with servers[] naming impossiblemetals.com. Saved verbatim to
+    openapi/_original/. Eight further OpenAPI 3.1.0 documents in openapi/ were derived by API Evangelist
+    from the site's own route index and OPTIONS schema documents — those are ours, not the provider's.
+- id: oembed
+  conforms: true
+  evidence: >-
+    The site is a live oEmbed 1.0 provider. GET /wp-json/oembed/1.0/embed?url=<site url> returns an
+    oEmbed response in JSON, and ?format=xml returns XML. Discovery links are present in the homepage
+    <head>. Probed 200 on 2026-08-23.
+- id: rfc8288
+  conforms: true
+  evidence: >-
+    Collection responses carry an RFC 8288 Link header with rel="next" / rel="prev". Observed on
+    GET /wp-json/wp/v2/posts?per_page=1 on 2026-08-23.
+- id: pagination
+  conforms: true
+  evidence: >-
+    Page-number pagination with page/per_page (max 100) plus X-WP-Total and X-WP-TotalPages headers,
+    exposed to browsers via Access-Control-Expose-Headers. NOTE the surface is internally inconsistent:
+    the /tribe/events/v1/ half returns total/total_pages/next_rest_url in the JSON body instead of headers.
+- id: cors
+  conforms: true
+  evidence: >-
+    Access-Control-Expose-Headers and Access-Control-Allow-Headers are present on every REST response, so
+    the surface is usable from a browser.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors are served as application/json with the WordPress code/message/data envelope, not
+    application/problem+json, and carry no `type` URI. Verified against seven distinct live error bodies —
+    see errors/impossible-metals-problem-types.yml.
+- id: idempotency
+  conforms: na
+  evidence: >-
+    No idempotency mechanism, and none needed: the public surface is entirely GET. See the idempotency
+    block in conventions/impossible-metals-conventions.yml.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth. /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource both 404
+    on both hosts. The only authentication mechanism the site advertises is WordPress Application
+    Passwords over HTTP Basic.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on both hosts on 2026-08-23.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No event, streaming or webhook surface is published. The route index does expose
+    /wp-json/tribe/zapier/v1/* and /wp-json/tribe/power-automate/v1/* trigger endpoints, but those are
+    authenticated integration hooks for Zapier and Power Automate, not a documented webhook catalog, and
+    Impossible Metals publishes nothing about them. No AsyncAPI or Webhooks artifact is emitted, because
+    there is no event surface to describe. N/A rather than a failure.
+- id: rfc8594
+  conforms: false
+  evidence: No Sunset or Deprecation header on any probed response; no deprecation policy published.
+- id: rfc8615
+  conforms: false
+  evidence: >-
+    Zero /.well-known/ documents on either host — all eight probed paths returned a real 404 with the
+    site's own HTML 404 page. See well-known/impossible-metals-well-known.yml.
+- id: rfc9309
+  conforms: true
+  evidence: >-
+    A valid robots.txt is served (HTTP 200) with two rules and a sitemap pointer to /wp-sitemap.xml.
+    Nothing in this pass was blocked by it.
+- id: json-api
+  conforms: false
+  evidence: Responses are plain JSON objects and arrays; no JSON:API document structure, no `data`/`included` envelope.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface, no OData query syntax.
+- id: scim
+  conforms: false
+  evidence: >-
+    /wp-json/wp/v2/users exists but is a WordPress author list, not a SCIM surface — no
+    urn:ietf:params:scim:schemas:* URN appears anywhere in the contract.
+domain_standard:
+  declared: false
+  sector: Deep-sea mining and critical minerals
+  evidence: >-
+    Reward-only check, and honestly unmet. There is no regulatory regime for extractives in the API
+    Evangelist scoring map (the nine regimes cover banking, securities, health, payments, insurance,
+    telecommunications, energy/utilities, education and government), and no domain standard is declared
+    anywhere in either published contract. The standards that do govern this company's actual business —
+    ISA exploration and environmental reporting under UNCLOS, mineral-resource reporting frameworks, and
+    B Corp and sustainability disclosure — are met through documents and filings, not through an API, and
+    Impossible Metals publishes its environmental data as spreadsheets on Google Drive
+    (https://impossiblemetals.com/sustainability/public-data/, HTTP 200) rather than through any
+    machine-readable endpoint. Nothing is invented to fill this slot.
+  candidates_probed:
+  - {standard: 'ISA / UNCLOS environmental reporting', found_in_contract: false}
+  - {standard: 'DCAT / CKAN open-data catalog', found_in_contract: false, note: 'The public-data page links to Google Drive folders; there is no data catalog endpoint.'}
+compliance:
+  published_certifications: []
+  note: >-
+    No SOC 2, ISO 27001, PCI, HIPAA or FedRAMP claim, and no trust center — probed and confirmed absent by
+    0-working/probe-security-programs.py on 2026-08-23 (vdp=none trust=none). The company IS a certified
+    B Corp, which is a social/environmental certification of the business, not a security or data-handling
+    program, so NO Compliance pointer is emitted in apis.yml. Emitting one would let a B Corp badge stand
+    in for an audited security posture, which is exactly the substitution this check exists to prevent.

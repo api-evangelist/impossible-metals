@@ -1,0 +1,70 @@
+generated: '2026-08-23'
+method: probed
+source: Live anonymous requests against https://impossiblemetals.com/wp-json/ on 2026-08-23. Every request and response fragment below was actually executed.
+note: >-
+  All examples are anonymous GETs. No credential, header or signup is required. Keep per_page <= 100 and
+  send an identifying User-Agent — Cloudflare answers 403 to some requests that carry none.
+examples:
+- name: Search everything Impossible Metals publishes
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/search?search=nodule&per_page=5'
+  note: 586 searchable objects at capture. Returns id / title / url / type / subtype.
+- name: List the most recent posts
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/posts?per_page=1&_fields=id,date,slug,link,title'
+  response_headers: {X-WP-Total: 247, X-WP-TotalPages: 247}
+  response: |
+    [{"id":9970,
+      "date":"2026-07-07T15:08:05",
+      "slug":"deep-sea-minerals-corp-signs-mou-with-impossible-metals-to-evaluate-autonomous-robotic-nodule-collection-technology",
+      "link":"https://impossiblemetals.com/blog/deep-sea-minerals-corp-signs-mou-with-impossible-metals-to-evaluate-autonomous-robotic-nodule-collection-technology/",
+      "title":{"rendered":"Deep Sea Minerals Corp. Signs MOU with Impossible Metals to Evaluate Autonomous Robotic Nodule Collection Technology"}}]
+- name: Read the FAQ knowledge base
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/avada_faq?per_page=2&_fields=id,slug,link,title,faq_category'
+  response_headers: {X-WP-Total: 141}
+  response: |
+    [{"id":9830,"slug":"why-does-the-world-need-more-critical-minerals",
+      "title":{"rendered":"Why does the world need more critical minerals?"},"faq_category":[48]},
+     {"id":9829,"slug":"will-deep-sea-mining-harm-marine-ecosystems",
+      "title":{"rendered":"Will deep sea mining harm marine ecosystems?"},"faq_category":[48]}]
+- name: List the FAQ categories, with entry counts
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/faq_category?per_page=20&_fields=id,name,slug,count'
+  response: |
+    38 impossible-metals-technology (32)
+    37 environmental-and-social-responsibility-for-deep-sea-mining (19)
+    39 deep-sea-mining-regulations (16)
+    45 myth-busting-false-and-misleading-statements-about-deep-sea-mining-dsm (16)
+    36 market-for-deep-sea-critical-minerals (12)
+    40 impossible-metals-company (12)
+    46 i-techno-economic-analysis-tea (9)
+    43 impossible-metals-competitors (8)
+    41 transport-vessels (7)
+    48 home-page (5)
+    44 h-mineral-processing-of-polymetallic-nodules (4)
+- name: Filter posts to one category
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/posts?categories=16&per_page=10'
+  note: 'Category 16 is press-release (23 posts). Category 17 is news (52), 18 is blog (86), 25 is podcasts-webinars (61).'
+- name: Resolve a post plus its author, image and terms in one request
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/posts?per_page=1&_embed'
+  note: _embed inlines the linked author, featured media and taxonomy terms under _embedded.
+- name: Page through the media library
+  request: 'GET https://impossiblemetals.com/wp-json/wp/v2/media?per_page=100&page=1&_fields=id,source_url,mime_type,alt_text'
+  response_headers: {X-WP-Total: 727, X-WP-TotalPages: 8}
+- name: List event venues
+  request: 'GET https://impossiblemetals.com/wp-json/tribe/events/v1/venues?per_page=1'
+  response: '{"rest_url":"...","next_rest_url":"...","total":40,"total_pages":40}'
+  note: 'The events surface paginates in the BODY, not in X-WP-* headers. 40 venues, 22 organizers at capture.'
+- name: Fetch the published events OpenAPI
+  request: 'GET https://impossiblemetals.com/wp-json/tribe/events/v1/doc'
+  note: Returns OpenAPI 3.0.0 with servers[] on impossiblemetals.com. Saved verbatim to openapi/_original/.
+- name: Discover every route the site exposes
+  request: 'GET https://impossiblemetals.com/wp-json/'
+  note: 269 routes across 23 namespaces at capture, with full per-route argument schemas.
+- name: oEmbed a post
+  request: 'GET https://impossiblemetals.com/wp-json/oembed/1.0/embed?url=https://impossiblemetals.com/'
+  note: Add &format=xml for the XML response.
+error_examples:
+- request: 'GET https://impossiblemetals.com/wp-json/wp/v2/posts?per_page=999'
+  response: '{"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page must be between 1 (inclusive) and 100 (inclusive)"}}}'
+- request: 'GET https://impossiblemetals.com/wp-json/tec/v1/events'
+  response: '{"code":"missing_experimental_endpoint_acknowledgement","message":"Experimental endpoint requires acknowledgement header.","data":{"status":400}}'
+- request: 'GET https://impossiblemetals.com/wp-json/wp/v2/posts/999999'
+  response: '{"code":"rest_post_invalid_id","message":"Invalid post ID.","data":{"status":404}}'

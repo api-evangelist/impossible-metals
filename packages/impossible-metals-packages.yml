@@ -1,0 +1,22 @@
+generated: '2026-08-23'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org/-/v1/search?text=impossible-metals), PyPI
+  (pypi.org/pypi/impossible-metals/json → 404), the github.com/Impossible-Metals organization
+  (api.github.com/orgs/impossible-metals → 200, public_repos 0), and a full crawl of
+  impossiblemetals.com. Probed 2026-08-23.
+package_count: 0
+official_count: 0
+note: >-
+  Impossible Metals publishes no client libraries, no SDKs and no CLI, on any registry, in any language.
+  It has a GitHub organization at https://github.com/Impossible-Metals, created 2024-01-10, with zero
+  public repositories and no profile metadata linking it to the company, so no GitHubOrganization pointer
+  is emitted — an empty org that cannot be tied to the company from its own metadata is not evidence of a
+  public code surface. No SDKs pointer is emitted in apis.yml, because sdk_count is genuinely zero.
+  Consumers of the content surface use a generic HTTP client or an off-the-shelf WordPress REST library
+  published by third parties, none of which is first-party and none of which is listed here.
+registries_checked:
+- {registry: npm, query: impossible-metals, first_party_hits: 0}
+- {registry: pypi, package: impossible-metals, status: 404}
+- {registry: github, org: Impossible-Metals, status: 200, public_repos: 0}
+packages: []

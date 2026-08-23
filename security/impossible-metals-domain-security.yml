@@ -1,0 +1,16 @@
+generated: '2026-08-23'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: impossiblemetals.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 28 13:17:53 2026 GMT
+  hsts: false
+domains:
+- domain: impossiblemetals.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none

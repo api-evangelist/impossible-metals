@@ -1,0 +1,440 @@
+openapi: 3.1.0
+info:
+  title: Impossible Metals Discovery API
+  version: wp/v2
+  description: 'Public, unauthenticated discovery surface for the impossiblemetals.com WordPress REST API: the API
+    root, which enumerates all 269 routes across 23 namespaces along with site identity and the supported authentication
+    mechanism, plus the published author and post-status vocabularies.'
+  contact:
+    name: Impossible Metals
+    url: https://impossiblemetals.com/contact/
+  x-derived-from: https://impossiblemetals.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Impossible Metals publishes no developer program. This document describes
+    the anonymously readable WordPress REST content API served from impossiblemetals.com. Every path, parameter
+    and schema was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing
+    is invented.
+servers:
+- url: https://impossiblemetals.com/wp-json
+  description: Impossible Metals WordPress REST API
+tags:
+- name: Discovery
+  description: API root, route index, authentication advertisement and site identity.
+- name: Authors
+  description: Published authors of Impossible Metals content (8 at capture).
+paths:
+  /:
+    get:
+      operationId: getApiRoot
+      summary: Get the API root
+      description: 'Retrieve the WordPress REST API root document: site name and description, namespaces, the full
+        route index with per-route arguments, and the advertised authentication mechanism.'
+      tags:
+      - Discovery
+      parameters:
+      - name: context
+        in: query
+        description: The context parameter.
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Get the API root — success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400': &id001
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404': &id002
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+  /wp/v2/users:
+    get:
+      operationId: listAuthors
+      summary: List authors
+      description: Retrieve the users who have authored published content. 8 authors were live at capture.
+      tags:
+      - Authors
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: exclude
+        in: query
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: include
+        in: query
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: offset
+        in: query
+        description: Offset the result set by a specific number of items.
+        schema:
+          type: integer
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      - name: orderby
+        in: query
+        description: Sort collection by user attribute.
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - registered_date
+          - slug
+          - include_slugs
+          - email
+          - url
+          default: name
+      - name: slug
+        in: query
+        description: Limit result set to users with one or more specific slugs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: roles
+        in: query
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or
+          single role.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: capabilities
+        in: query
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list
+          or single capability.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: who
+        in: query
+        description: Limit result set to users who are considered authors.
+        schema:
+          type: string
+          enum:
+          - authors
+      - name: has_published_posts
+        in: query
+        description: Limit result set to users who have published posts.
+        schema:
+          type: boolean
+          items:
+            type: string
+            enum:
+              post: post
+              page: page
+              attachment: attachment
+              nav_menu_item: nav_menu_item
+              wp_block: wp_block
+              wp_template: wp_template
+              wp_template_part: wp_template_part
+              wp_global_styles: wp_global_styles
+              wp_navigation: wp_navigation
+              wp_font_family: wp_font_family
+              wp_font_face: wp_font_face
+              tribe_venue: tribe_venue
+              tribe_organizer: tribe_organizer
+              tribe_events: tribe_events
+              avada_portfolio: avada_portfolio
+              avada_faq: avada_faq
+              tec_calendar_embed: tec_calendar_embed
+      - name: search_columns
+        in: query
+        description: Array of column names to be searched.
+        schema:
+          type: array
+          default: []
+          items:
+            enum:
+            - email
+            - name
+            - id
+            - username
+            - slug
+            type: string
+      responses:
+        '200':
+          description: List authors — success.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the requested per_page size.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400': *id001
+        '404': *id002
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List post statuses
+      description: Retrieve the publicly visible post statuses.
+      tags:
+      - Discovery
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: List post statuses — success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '400': *id001
+        '404': *id002
+components:
+  schemas:
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json
+        with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the user.
+          readOnly: true
+        username:
+          type: string
+          description: Login name for the user.
+        name:
+          type: string
+          description: Display name for the user.
+        first_name:
+          type: string
+          description: First name for the user.
+        last_name:
+          type: string
+          description: Last name for the user.
+        email:
+          type: string
+          description: The email address for the user.
+          format: email
+        url:
+          type: string
+          description: URL of the user.
+          format: uri
+        description:
+          type: string
+          description: Description of the user.
+        link:
+          type: string
+          description: Author URL of the user.
+          format: uri
+          readOnly: true
+        locale:
+          type: string
+          description: Locale for the user.
+          enum:
+          - ''
+          - en_US
+        nickname:
+          type: string
+          description: The nickname for the user.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the user.
+        registered_date:
+          type: string
+          description: Registration date for the user.
+          format: date-time
+          readOnly: true
+        roles:
+          type: array
+          description: Roles assigned to the user.
+          items:
+            type: string
+        password:
+          type: string
+          description: Password for the user (never included).
+        capabilities:
+          type: object
+          description: All capabilities assigned to the user.
+          readOnly: true
+        extra_capabilities:
+          type: object
+          description: Any extra capabilities assigned to the user.
+          readOnly: true
+        avatar_urls:
+          type: object
+          description: Avatar URLs for the user.
+          readOnly: true
+          properties:
+            '24':
+              type: string
+              description: Avatar URL with image size of 24 pixels.
+              format: uri
+            '48':
+              type: string
+              description: Avatar URL with image size of 48 pixels.
+              format: uri
+            '96':
+              type: string
+              description: Avatar URL with image size of 96 pixels.
+              format: uri
+        meta:
+          type: object
+          description: Meta fields.
+          properties:
+            lw_harbor_dismissed_notices:
+              type: object
+            persisted_preferences:
+              type: object
+              properties:
+                _modified:
+                  type: string
+                  description: The date and time the preferences were updated.
+                  format: date-time
+    Status:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The title for the status.
+          readOnly: true
+        private:
+          type: boolean
+          description: Whether posts with this status should be private.
+          readOnly: true
+        protected:
+          type: boolean
+          description: Whether posts with this status should be protected.
+          readOnly: true
+        public:
+          type: boolean
+          description: Whether posts of this status should be shown in the front end of the site.
+          readOnly: true
+        queryable:
+          type: boolean
+          description: Whether posts with this status should be publicly-queryable.
+          readOnly: true
+        show_in_list:
+          type: boolean
+          description: Whether to include posts in the edit listing for their post type.
+          readOnly: true
+        slug:
+          type: string
+          description: An alphanumeric identifier for the status.
+          readOnly: true
+        date_floating:
+          type: boolean
+          description: Whether posts of this status may have floating published dates.
+          readOnly: true

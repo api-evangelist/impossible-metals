@@ -1,0 +1,24 @@
+generated: '2026-08-23'
+method: searched
+source: >-
+  https://impossiblemetals.com/ (full nav crawl, 2026-08-23) — no /pricing, /plans, /developers or
+  /api page exists on the site, and the 93-page site map contains none.
+plan_count: 0
+free_tier: true
+signup_required: false
+note: >-
+  Impossible Metals sells seabed-collected critical minerals and the robotic systems that collect them.
+  It has no software product, no developer program and therefore no API plans, no pricing page and no
+  metering. The content surface profiled in this repo is free and needs no signup, not because a free
+  tier was designed, but because nothing was ever gated. Recorded as plan_count 0 deliberately: this is a
+  measured absence, not a gap in the pass.
+commercial_model:
+  what_is_sold: >-
+    Polymetallic nodules and the critical metals refined from them (nickel, cobalt, copper, manganese),
+    plus the Eureka autonomous collection system. The company reports $500M+ in off-take letters of intent.
+  how_it_is_sold: Off-take agreements, partnerships and exploration/lease arrangements — negotiated, not listed.
+  pricing_pages_probed:
+  - {url: 'https://impossiblemetals.com/pricing/', status: 404}
+  - {url: 'https://impossiblemetals.com/plans/', status: 404}
+  contact: https://impossiblemetals.com/contact/
+plans: []

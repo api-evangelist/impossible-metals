@@ -1,0 +1,91 @@
+generated: '2026-08-23'
+method: probed
+source: >-
+  Live anonymous probes of https://impossiblemetals.com/wp-json/* on 2026-08-23. Impossible Metals
+  publishes no error reference, so every entry below is an error body actually returned by the live
+  surface, quoted verbatim — nothing is derived from documentation, because there is none.
+format: wordpress-rest
+rfc9457: false
+media_type: application/json
+envelope:
+  code: Machine-readable WordPress error code.
+  message: Human-readable message. Not stable across WordPress versions or locales.
+  data.status: HTTP status code, duplicated inside the body.
+  data.params: Per-parameter validation detail. Present only on rest_invalid_param and rest_missing_callback_param.
+  data.details: Structured per-parameter validation objects. Present on rest_invalid_param.
+note: >-
+  The envelope is NOT application/problem+json and carries no `type` URI, so RFC 9457 tooling will not
+  parse it. It is served with Content-Type application/json. Agents must key on `code`, not on `message`.
+problem_types:
+- code: rest_invalid_param
+  status: 400
+  title: Invalid parameter
+  detail: One or more query parameters failed validation.
+  observed_on: GET /wp-json/wp/v2/posts?per_page=999
+  observed_body: '{"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page must be between 1 (inclusive) and 100 (inclusive)"}}}'
+  remediation: Read data.params for the offending parameter and its constraint. per_page is capped at 100.
+- code: rest_missing_callback_param
+  status: 400
+  title: Missing required parameter
+  detail: A required parameter was not supplied.
+  observed_on: GET /wp-json/oembed/1.0/embed
+  observed_body: '{"code":"rest_missing_callback_param","message":"Missing parameter(s): url","data":{"status":400,"params":["url"]}}'
+  remediation: Supply every parameter named in data.params.
+- code: missing_experimental_endpoint_acknowledgement
+  status: 400
+  title: Experimental endpoint requires acknowledgement
+  detail: >-
+    The /wp-json/tec/v1/ event routes are flagged experimental and refuse anonymous calls until the
+    caller sends an acknowledgement header.
+  observed_on: GET /wp-json/tec/v1/events?per_page=1
+  observed_body: '{"code":"missing_experimental_endpoint_acknowledgement","message":"Experimental endpoint requires acknowledgement header.","data":{"status":400}}'
+  remediation: >-
+    Use the stable /wp-json/tribe/events/v1/ surface instead. The acknowledgement header name is not
+    documented anywhere on impossiblemetals.com, so this contract is published but not anonymously usable.
+- code: rest_forbidden
+  status: 401
+  title: Not permitted
+  detail: The route requires authentication the caller does not have.
+  observed_on: GET /wp-json/wp/v2/settings
+  observed_body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  remediation: >-
+    Administrative routes are not part of the public surface. Authenticate with a WordPress application
+    password if you are a site administrator; otherwise the data is not available.
+- code: rest_post_invalid_id
+  status: 404
+  title: Invalid post ID
+  detail: No published post, page, FAQ entry or media attachment exists with that identifier.
+  observed_on: GET /wp-json/wp/v2/posts/999999 and GET /wp-json/wp/v2/media/999999
+  observed_body: '{"code":"rest_post_invalid_id","message":"Invalid post ID.","data":{"status":404}}'
+  remediation: List the collection first and use an id it returns. Unpublished items are indistinguishable from missing ones anonymously.
+- code: rest_term_invalid
+  status: 404
+  title: Term does not exist
+  detail: No taxonomy term exists with that identifier.
+  observed_on: GET /wp-json/wp/v2/categories/999999
+  observed_body: '{"code":"rest_term_invalid","message":"Term does not exist.","data":{"status":404}}'
+  remediation: List the taxonomy first and use an id it returns.
+- code: rest_user_invalid_id
+  status: 404
+  title: Invalid user ID
+  detail: No user with published content exists with that identifier.
+  observed_on: GET /wp-json/wp/v2/users/999999
+  observed_body: '{"code":"rest_user_invalid_id","message":"Invalid user ID.","data":{"status":404}}'
+  remediation: List /wp/v2/users and use an id it returns.
+- code: rest_no_route
+  status: 404
+  title: No route found
+  detail: No route matches the URL and request method.
+  observed_on: GET /wp-json/wp/v2/nope
+  observed_body: '{"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}'
+  remediation: Fetch the route index at /wp-json/ and use a route it lists.
+- code: oembed_invalid_url
+  status: 404
+  title: oEmbed URL not found
+  detail: The supplied url is not an embeddable object on impossiblemetals.com.
+  observed_on: GET /wp-json/oembed/1.0/embed?url=https://example.com/
+  observed_body: '{"code":"oembed_invalid_url","message":"Not Found","data":{"status":404}}'
+  remediation: Supply a URL on impossiblemetals.com that resolves to a published post or page.
+not_observed:
+- {status: 429, note: 'No rate-limit response was produced during this pass. See rate-limits/.'}
+- {status: 5xx, note: No server error was observed on any probe.}

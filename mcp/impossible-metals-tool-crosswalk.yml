@@ -1,0 +1,82 @@
+generated: '2026-08-23'
+method: derived
+source: mcp/impossible-metals-mcp.yml + openapi/*.yml
+description: >-
+  Binds each CANDIDATE MCP tool to the REST operation that backs it. Impossible Metals publishes no MCP
+  server and no GraphQL surface, so this crosswalk is a derivation over the REST contracts in this repo,
+  not a map of a shipped agent surface. Confidence is high throughout because every tool was derived
+  one-to-one from a named operation — there is no name-matching guesswork. The exception is the events
+  family: the OpenAPI document Impossible Metals' host publishes at /wp-json/tribe/events/v1/doc carries
+  NO operationId on any of its 30 operations, so those rows bind by HTTP method + path instead.
+surfaces:
+  openapi:
+  - path: openapi/impossible-metals-posts-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-pages-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-faq-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-media-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-taxonomy-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-search-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-discovery-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-oembed-openapi.yml
+    gated: false
+  - path: openapi/impossible-metals-events-openapi.yml
+    gated: false
+    note: Published verbatim by the provider's own host at /wp-json/tribe/events/v1/doc.
+  - path: openapi/impossible-metals-events-tec-openapi.yml
+    gated: true
+    note: >-
+      Published verbatim at /wp-json/tec/v1/docs, but every route answers 400
+      missing_experimental_endpoint_acknowledgement on an anonymous call, so no tool is bound to it.
+  graphql: null
+  mcp: null
+crosswalk:
+- {tool: search_impossible_metals, category: discovery, rest: [search], binding: direct, confidence: high}
+- {tool: list_posts, category: content, rest: [listPosts], binding: direct, confidence: high}
+- {tool: get_post, category: content, rest: [getPost], binding: direct, confidence: high}
+- {tool: list_pages, category: content, rest: [listPages], binding: direct, confidence: high}
+- {tool: get_page, category: content, rest: [getPage], binding: direct, confidence: high}
+- {tool: list_faqs, category: knowledge-base, rest: [listFaqs], binding: direct, confidence: high}
+- {tool: get_faq, category: knowledge-base, rest: [getFaq], binding: direct, confidence: high}
+- {tool: list_faq_categories, category: knowledge-base, rest: [listFaqCategories], binding: direct, confidence: high}
+- {tool: get_faq_category, category: knowledge-base, rest: [getFaqCategory], binding: direct, confidence: high}
+- {tool: list_media, category: media, rest: [listMedia], binding: direct, confidence: high}
+- {tool: get_media_item, category: media, rest: [getMediaItem], binding: direct, confidence: high}
+- {tool: list_categories, category: taxonomy, rest: [listCategories], binding: direct, confidence: high}
+- {tool: get_category, category: taxonomy, rest: [getCategory], binding: direct, confidence: high}
+- {tool: list_tags, category: taxonomy, rest: [listTags], binding: direct, confidence: high}
+- {tool: get_tag, category: taxonomy, rest: [getTag], binding: direct, confidence: high}
+- {tool: list_post_types, category: discovery, rest: [listTypes], binding: direct, confidence: high}
+- {tool: list_taxonomies, category: discovery, rest: [listTaxonomies], binding: direct, confidence: high}
+- {tool: list_authors, category: discovery, rest: [listAuthors], binding: direct, confidence: high}
+- {tool: get_api_root, category: discovery, rest: [getApiRoot], binding: direct, confidence: high}
+- {tool: get_oembed, category: embed, rest: [getOembed], binding: direct, confidence: high}
+- {tool: list_events, category: events, rest: ['GET /events'], binding: method-path, confidence: high,
+   note: The provider-published events spec declares no operationId, so this binds by method and path.}
+- {tool: list_event_venues, category: events, rest: ['GET /venues'], binding: method-path, confidence: high,
+   note: The provider-published events spec declares no operationId, so this binds by method and path.}
+- {tool: list_event_organizers, category: events, rest: ['GET /organizers'], binding: method-path, confidence: high,
+   note: The provider-published events spec declares no operationId, so this binds by method and path.}
+mcp_only: []
+rest_only:
+- {operation: listStatuses, reason: Post-status vocabulary; too low-value to expose as its own tool.}
+- {operation: 'GET /events/{id}', reason: 'Event detail; not bound because the forward-looking events window returned 0 events on 2026-08-23, so there is nothing to fetch by id.'}
+- {operation: 'GET /events/by-slug/{slug}', reason: Same as above.}
+- {operation: 'GET /venues/{id}', reason: Venue detail; the list tool already returns the full venue records.}
+- {operation: 'GET /organizers/{id}', reason: Organizer detail; the list tool already returns the full organizer records.}
+- {operation: 'GET /categories (tribe)', reason: Event category vocabulary; duplicated by the site taxonomy tools.}
+- {operation: 'GET /tags (tribe)', reason: Event tag vocabulary; duplicated by the site taxonomy tools.}
+- {operation: 'POST/DELETE on every tribe route', reason: 'Write operations; require WordPress application-password authentication and are not part of the public surface.'}
+- {operation: 'every /tec/v1 operation', reason: 'Contract is published but the surface answers 400 missing_experimental_endpoint_acknowledgement anonymously.'}
+coverage:
+  mcp_tools: 23
+  rest_operations_public_read: 30
+  bound: 23
+  mcp_only: 0
+  rest_only: 9

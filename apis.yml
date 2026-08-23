@@ -1,18 +1,348 @@
 aid: impossible-metals
 name: Impossible Metals
-description: 'Impossible Metals is a company surfaced via the API Evangelist harvest backlog (source:
-  secondary-market) and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Impossible Metals is a deep-ocean robotics and critical-minerals company founded in 2020 by CEO
+  Oliver Gunasekara, headquartered in San Jose, California with a robotics lab in Canada, and a
+  member of Y Combinator's W22 cohort. It builds the Eureka autonomous underwater vehicle, a
+  hovering AUV that uses computer vision and robotic arms to pick polymetallic nodules from the
+  seabed one at a time — leaving visible fauna and the sediment layer in place — as an alternative
+  to the dredge-and-riser designs used elsewhere in deep-sea mining. Eureka I and Eureka II have
+  been sea-tested, Eureka III is slated for a 2026 test in the BGR contract area of the
+  Clarion-Clipperton Zone, and the company has applied for a deep-sea mining lease in U.S. federal
+  waters and for observer status with the International Seabed Authority. It is a certified B Corp
+  and publishes environmental data, policy positions and testimony alongside its technical work.
+  Impossible Metals is a robotics and mining company rather than a software vendor: it operates no
+  developer program, publishes no product API, SDKs or developer portal, and hosts no api. or
+  developer. subdomain. The only machine-readable interfaces it serves are the WordPress REST
+  content API behind impossiblemetals.com and the two OpenAPI documents its events plugin publishes
+  on that same host, which are captured here for discovery purposes and are anonymously readable
+  and read-only.
 url: https://raw.githubusercontent.com/api-evangelist/impossible-metals/refs/heads/main/apis.yml
+image: https://impossiblemetals.com/wp-content/uploads/2022/09/ImpossibleMetals_logo_REVERSE_RGB.svg
+accessModel:
+  pricing: none
+  onboarding: none
+  trial: false
+  try_now: true
+  public: true
+  label: Public read-only content API, no signup
+  confidence: high
+  source:
+  - authentication
+  generated: '2026-08-23'
+  method: derived
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-23'
 modified: '2026-08-23'
 tags:
 - Company
-apis: []
+- Deep Sea Mining
+- Critical Minerals
+- Battery Metals
+- Robotics
+- Autonomous Underwater Vehicles
+- Ocean Technology
+- Mining
+- Sustainability
+- Climate Tech
+- Content
+- Events
+apis:
+- aid: impossible-metals:impossible-metals-posts-api
+  name: Impossible Metals Posts API
+  description: >-
+    Public, unauthenticated read access to the Impossible Metals news, blog and press archive via
+    the WordPress core REST API — testimony, policy positions, Eureka programme updates and
+    partnership announcements. Verified live at 247 published posts on 2026-08-23.
+  humanURL: https://impossiblemetals.com/news/blog/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Posts
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-posts-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-posts-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-pages-api
+  name: Impossible Metals Pages API
+  description: >-
+    Public, unauthenticated read access to the static pages of impossiblemetals.com — Technology,
+    Sustainability, About, Markets, Partners, Board & Advisors, Policies & Reports, Careers and
+    Contact. Verified live at 93 published pages on 2026-08-23.
+  humanURL: https://impossiblemetals.com/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Pages
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-pages-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-pages-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-faq-api
+  name: Impossible Metals FAQ API
+  description: >-
+    Public, unauthenticated read access to the Impossible Metals frequently-asked-questions
+    knowledge base — the company's own structured position on nodule collection, environmental
+    impact, regulation and the Eureka vehicle — exposed as the avada_faq custom post type and the
+    faq_category taxonomy. Verified live at 141 FAQ entries across 11 categories on 2026-08-23.
+    This is the largest genuinely Impossible-Metals-specific resource on the surface.
+  humanURL: https://impossiblemetals.com/frequently-asked-questions/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - FAQ
+  - Knowledge Base
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-faq-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-faq-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-media-api
+  name: Impossible Metals Media API
+  description: >-
+    Public, unauthenticated read access to the media library behind impossiblemetals.com — Eureka
+    vehicle photography, seabed and nodule imagery, technical diagrams, report PDFs and press
+    assets with their generated size variants. Verified live at 727 attachments on 2026-08-23.
+  humanURL: https://impossiblemetals.com/media-coverage/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Media
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-media-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-media-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-taxonomy-api
+  name: Impossible Metals Taxonomy API
+  description: >-
+    Public, unauthenticated read access to the classification vocabularies behind
+    impossiblemetals.com: post categories, post tags, the registered post types and the registered
+    taxonomies. Verified live at 16 categories and 2 tags on 2026-08-23.
+  humanURL: https://impossiblemetals.com/news/blog/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Taxonomy
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-taxonomy-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-taxonomy-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-search-api
+  name: Impossible Metals Search API
+  description: >-
+    Public, unauthenticated cross-content search over impossiblemetals.com — posts, pages, FAQ
+    entries and events — returning lightweight id / title / url / type / subtype records. Verified
+    live at 586 searchable objects on 2026-08-23.
+  humanURL: https://impossiblemetals.com/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Search
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-search-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-search-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-events-api
+  name: Impossible Metals Events API
+  description: >-
+    Public, unauthenticated read access to the Impossible Metals events calendar — conference
+    appearances, webinars, demo days and the venues and organizers behind them — served by The
+    Events Calendar plugin at /wp-json/tribe/events/v1/. Impossible Metals' own host publishes an
+    OpenAPI 3.0.0 description of this surface at /wp-json/tribe/events/v1/doc, captured verbatim.
+    Verified live at 40 venues and 22 organizers on 2026-08-23; the forward-looking events window
+    returned 0 upcoming events on that date.
+  humanURL: https://impossiblemetals.com/impossible-metals-events/
+  baseURL: https://impossiblemetals.com/wp-json/tribe/events/v1
+  tags:
+  - Events
+  - Calendar
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-events-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-events-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-events-tec-api
+  name: Impossible Metals Events API (TEC v1, experimental)
+  description: >-
+    The successor events surface at /wp-json/tec/v1/, described by an OpenAPI 3.0.4 document the
+    host publishes at /wp-json/tec/v1/docs and captured verbatim here. The contract is published
+    but the surface is NOT anonymously callable as written: every /tec/v1 route answered HTTP 400
+    missing_experimental_endpoint_acknowledgement on an anonymous GET on 2026-08-23, because the
+    endpoints are flagged experimental and require an acknowledgement header. Recorded as a
+    published-but-gated contract, not as a live API.
+  humanURL: https://impossiblemetals.com/impossible-metals-events/
+  baseURL: https://impossiblemetals.com/wp-json/tec/v1
+  tags:
+  - Events
+  - Calendar
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-events-tec-openapi.yml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+- aid: impossible-metals:impossible-metals-discovery-api
+  name: Impossible Metals Discovery API
+  description: >-
+    Public, unauthenticated discovery surface for the impossiblemetals.com WordPress REST API: the
+    API root, which enumerates 269 routes across 23 namespaces along with site identity and the
+    advertised authentication mechanism, plus the published author and post-status vocabularies.
+    Verified live at 269 routes and 8 authors on 2026-08-23.
+  humanURL: https://impossiblemetals.com/wp-json/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - Discovery
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-discovery-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-discovery-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-oembed-api
+  name: Impossible Metals oEmbed API
+  description: >-
+    Public, unauthenticated oEmbed 1.0 provider for impossiblemetals.com. Returns oEmbed rich/link
+    responses in JSON or XML for any URL on the site, so third-party surfaces can embed Impossible
+    Metals posts and pages. Verified live on 2026-08-23.
+  humanURL: https://impossiblemetals.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fimpossiblemetals.com%2F
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - oEmbed
+  - Embed
+  - Content
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-oembed-openapi.yml
+  - type: Overlay
+    url: overlays/impossible-metals-oembed-overlay.yaml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +350,69 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.hiive.com/securities/impossible-metals-stock
+  url: https://impossiblemetals.com/
+- type: Blog
+  url: https://impossiblemetals.com/news/blog/
+- type: BlogRSS
+  url: https://impossiblemetals.com/feed/
+- type: Support
+  url: https://impossiblemetals.com/contact/
+- type: PrivacyPolicy
+  url: https://impossiblemetals.com/policies-reports/privacy-statement/
+- type: About
+  url: https://impossiblemetals.com/about/
+- type: Technology
+  url: https://impossiblemetals.com/technology/robotic-collection-system/
+- type: FAQ
+  url: https://impossiblemetals.com/frequently-asked-questions/
+- type: Press
+  url: https://impossiblemetals.com/news/press-releases/
+- type: Careers
+  url: https://impossiblemetals.com/join-us/
+- type: Partners
+  url: https://impossiblemetals.com/about/partners/
+- type: Events
+  url: https://impossiblemetals.com/impossible-metals-events/
+- type: Sustainability
+  url: https://impossiblemetals.com/sustainability/
+- type: OpenData
+  url: https://impossiblemetals.com/sustainability/public-data/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/impossible-metals/
+- type: YouTube
+  url: https://www.youtube.com/@impossiblemetals
+- type: Twitter
+  url: https://twitter.com/ImpossMetals
+- type: LLMsTxt
+  url: llms/impossible-metals-llms.txt
+- type: ToolCrosswalk
+  url: mcp/impossible-metals-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/impossible-metals-domain-security.yml
+- type: Plans
+  url: plans/impossible-metals-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/impossible-metals-rate-limits.yml
+- type: Conventions
+  url: conventions/impossible-metals-conventions.yml
+- type: Lifecycle
+  url: lifecycle/impossible-metals-lifecycle.yml
+- type: Conformance
+  url: conformance/impossible-metals-conformance.yml
+- type: ErrorCatalog
+  url: errors/impossible-metals-problem-types.yml
+- type: Authentication
+  url: authentication/impossible-metals-authentication.yml
+- type: DataModel
+  url: data-model/impossible-metals-data-model.yml
+- type: Examples
+  url: examples/impossible-metals-examples.yml
+x-enrichment:
+  date: '2026-08-23'
+  status: enriched
+  artifacts_added: 41
+  pass: local-v1
+x-coverage:
+  state: covered

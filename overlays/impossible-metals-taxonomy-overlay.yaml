@@ -1,0 +1,48 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Impossible Metals Taxonomy API
+  version: '2026-08-23'
+extends: openapi/impossible-metals-taxonomy-openapi.yml
+x-generated: '2026-08-23'
+x-method: generated
+x-source: API Evangelist enrichment pipeline. Records what THIS repo added on top of what impossiblemetals.com actually
+  serves, so the two are never confused.
+actions:
+- target: $.info
+  description: Record third-party provenance and the capture date on the description document itself.
+  update:
+    x-api-evangelist-profile: https://apis.io/provider/impossible-metals/
+    x-api-evangelist-captured: '2026-08-23'
+    x-api-evangelist-disclaimer: Independent third-party profile. Impossible Metals does not publish, maintain or
+      support this description. It was derived from the site's own WordPress REST route index and OPTIONS schema
+      documents.
+- target: $.info.contact
+  description: The provider publishes no developer contact; point at the general corporate contact form so the field
+    is honest rather than empty.
+  update:
+    name: Impossible Metals (general enquiries — no developer support channel exists)
+    url: https://impossiblemetals.com/contact/
+- target: $.servers[0]
+  description: Name the origin explicitly and record that it is the corporate website, not a dedicated API host.
+  update:
+    description: impossiblemetals.com — the corporate WordPress origin. There is no api. or developer. subdomain;
+      the content API is served from the website itself.
+- target: $.tags[?(@.name=='Taxonomy')]
+  description: Add the record count observed live at capture, so a consumer knows the size of the collection before
+    calling it.
+  update:
+    x-record-count: 16
+    x-record-count-noun: categories
+    x-record-count-observed: '2026-08-23'
+- target: $.paths.*.get
+  description: Mark every operation anonymously callable and read-only — this is the single most useful fact about
+    the surface.
+  update:
+    x-anonymous: true
+    x-read-only: true
+    x-rate-limit-published: false
+- target: $.components.schemas
+  description: Attach the shared WordPress REST error envelope so error handling is described in every document.
+  update:
+    x-error-catalog: errors/impossible-metals-problem-types.yml
+    x-error-format: wordpress-rest (NOT RFC 9457 problem+json)

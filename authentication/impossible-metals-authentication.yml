@@ -1,0 +1,57 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  https://impossiblemetals.com/wp-json/ (the site's own route index, which advertises the supported
+  authentication mechanism) + openapi/impossible-metals-events-tec-openapi.yml (the published
+  securitySchemes block) + live anonymous probes of every collection route on 2026-08-23.
+summary:
+  types:
+  - none
+  - http
+  anonymous_read: true
+  note: >-
+    The entire public surface profiled in this repo is anonymously readable. Every collection route
+    answered HTTP 200 with `Allow: GET` and no credentials on 2026-08-23. There is no API key, no
+    OAuth, no OpenID Connect and no signup — because there is no developer program. Authentication
+    only appears on the write half of the same routes, which is not part of the public surface.
+schemes:
+- name: none
+  type: none
+  description: >-
+    Anonymous read. GET on /wp-json/wp/v2/posts, /pages, /media, /avada_faq, /faq_category,
+    /categories, /tags, /types, /taxonomies, /users, /statuses, /search, on /wp-json/oembed/1.0/embed
+    and on /wp-json/tribe/events/v1/* all returned 200 without credentials. This is the surface an
+    agent can actually call.
+  sources:
+  - live probe 2026-08-23
+- name: ApplicationPasswords
+  type: http
+  scheme: basic
+  description: >-
+    WordPress Application Passwords over HTTP Basic. The route index advertises this as the site's
+    only supported authentication mechanism, with the authorization endpoint at
+    https://impossiblemetals.com/wp-admin/authorize-application.php. It gates the write half of the
+    content routes (POST/PUT/DELETE) and the administrative routes. It is issued per WordPress user
+    from the admin console — it is a site-administrator credential, not a developer credential, and
+    Impossible Metals publishes no process for a third party to obtain one.
+  authorization_endpoint: https://impossiblemetals.com/wp-admin/authorize-application.php
+  sources:
+  - https://impossiblemetals.com/wp-json/ (authentication.application-passwords)
+  - openapi/impossible-metals-events-tec-openapi.yml (components.securitySchemes.BasicAuth)
+gated_routes:
+- route: /wp-json/wp/v2/settings
+  status: 401
+  note: Returns 401 rest_forbidden_context anonymously.
+- route: /wp-json/wp/v2/block-types
+  status: 401
+  note: Returns 401 anonymously.
+- route: /wp-json/tec/v1/*
+  status: 400
+  note: >-
+    Not an authentication gate. Returns 400 missing_experimental_endpoint_acknowledgement — the TEC
+    v1 routes are flagged experimental and require an acknowledgement header before they will answer,
+    authenticated or not.
+oauth: false
+openid_connect: false
+mutual_tls: false
+api_keys: false

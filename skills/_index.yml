@@ -1,0 +1,26 @@
+generated: '2026-08-23'
+method: generated
+source: >-
+  Grounded in openapi/*.yml — every operationId, parameter, category id and record count referenced in these
+  skills was read from the live surface or from a spec in this repo on 2026-08-23. Nothing is invented.
+  Impossible Metals publishes no AGENTS.md and no skills of its own (probed /AGENTS.md, /.well-known/ — absent),
+  so these are API Evangelist generations over a third-party-profiled surface, not provider-published skills.
+note: >-
+  All three skills are read-only, because the whole anonymously reachable surface is read-only. There is no
+  write, no reversal and no idempotency concern to teach.
+skills:
+- name: impossible-metals-research-position
+  file: impossible-metals-research-position.md
+  api: impossible-metals:impossible-metals-faq-api
+  operations: [listFaqCategories, listFaqs, getFaq, search, listPosts]
+  summary: Read the company's own 141-entry FAQ knowledge base to answer questions about its stated position on deep-sea mining.
+- name: impossible-metals-monitor-news
+  file: impossible-metals-monitor-news.md
+  api: impossible-metals:impossible-metals-posts-api
+  operations: [listPosts, getPost, listCategories, listMedia]
+  summary: Poll the 247-post announcement archive with a date window for lease applications, MOUs, test results and testimony.
+- name: impossible-metals-harvest-media
+  file: impossible-metals-harvest-media.md
+  api: impossible-metals:impossible-metals-media-api
+  operations: [listMedia, getMediaItem]
+  summary: Enumerate and retrieve the 727-item media library, with the licensing caveat that must accompany any reuse.

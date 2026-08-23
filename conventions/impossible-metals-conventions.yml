@@ -1,0 +1,109 @@
+generated: '2026-08-23'
+method: derived
+source: >-
+  Live probes of https://impossiblemetals.com/wp-json/* on 2026-08-23 (response headers, error bodies,
+  pagination behaviour) + the site's own route index + openapi/*.yml. Impossible Metals publishes no
+  developer documentation, so nothing here comes from a docs page — every convention below was read off
+  the wire.
+auth_style:
+  anonymous_read: true
+  scheme: none for reads; HTTP Basic (WordPress Application Passwords) for writes
+  header: 'Authorization: Basic <base64 user:application-password>'
+  note: See authentication/impossible-metals-authentication.yml. There is no API key and no OAuth.
+pagination:
+  style: page-number
+  params:
+  - {name: page, default: 1, minimum: 1}
+  - {name: per_page, default: 10, minimum: 1, maximum: 100}
+  response_headers:
+  - {name: X-WP-Total, meaning: total items in the unpaginated collection}
+  - {name: X-WP-TotalPages, meaning: total pages at the requested per_page}
+  - {name: Link, meaning: 'RFC 8288 rel="next" / rel="prev" links'}
+  cors_exposed: 'Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages, Link — the pagination headers are readable from a browser.'
+  observed: 'GET /wp/v2/posts?per_page=1 returned X-WP-Total: 247, X-WP-TotalPages: 247 and a Link rel="next" on 2026-08-23.'
+  note: >-
+    The events surface at /wp-json/tribe/events/v1/ does NOT use these headers. It returns pagination
+    inside the JSON body instead — total, total_pages, rest_url, next_rest_url — so an agent has to
+    switch strategies between the two halves of the same site.
+field_selection:
+  param: _fields
+  description: Comma-separated allow-list of top-level response fields; reduces payload size.
+  supported: true
+  embedding:
+    param: _embed
+    description: Inline linked resources (author, featured media, terms) under _embedded rather than requiring follow-up requests.
+  envelope:
+    param: _envelope
+    description: Wrap status, headers and body in a single JSON object for clients that cannot read headers.
+  context:
+    param: context
+    values: [view, embed, edit]
+    default: view
+    note: edit requires authentication.
+filtering:
+  search: '?search=<string> on every collection'
+  date_windows: [after, before, modified_after, modified_before]
+  id_sets: [include, exclude]
+  ordering: '?orderby= + ?order=asc|desc'
+  taxonomy: '?categories=, ?tags=, ?categories_exclude=, ?tags_exclude= on posts'
+  slug: '?slug=<slug> on every collection'
+error_envelope:
+  format: wordpress-rest
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "code": "<machine_code>", "message": "<human message>", "data": { "status": <http_status>, "params": {...} } }'
+  note: >-
+    Not RFC 9457. The envelope is WordPress-specific and served as application/json, with the HTTP status
+    duplicated inside data.status. See errors/impossible-metals-problem-types.yml.
+rate_limit_signaling:
+  headers: none
+  note: >-
+    No X-RateLimit-*, no RateLimit-*, no Retry-After on any observed response. See
+    rate-limits/impossible-metals-rate-limits.yml.
+caching:
+  headers_observed: [cache-control, expires, age, last-modified, cf-cache-status, vary]
+  observed_example: 'GET /wp/v2/posts?per_page=1 returned cache-control: max-age=172800 with cf-cache-status: HIT on 2026-08-23.'
+  edge: Cloudflare, with cf-edge-cache "cache,platform=wordpress".
+  conditional_requests: Last-Modified is present, so If-Modified-Since is usable; no ETag was observed.
+request_id_tracing:
+  header: cf-ray
+  note: >-
+    A Cloudflare ray id, not an application request id. It identifies the edge request for Cloudflare
+    support purposes and is not something Impossible Metals surfaces or can correlate for a caller.
+versioning:
+  style: path-namespace
+  current: wp/v2
+  other_namespaces: [oembed/1.0, 'tribe/events/v1', 'tec/v1', 'tec/v2', 'tribe/views/v2', 'wp-site-health/v1', 'wp-block-editor/v1', 'wp-abilities/v1']
+  note: >-
+    Version lives in the URL namespace. There is no version header and no version negotiation. The
+    namespace list is discoverable from the API root at /wp-json/.
+idempotency:
+  supported: na
+  note: >-
+    Not applicable to the public surface. Every anonymously reachable operation is a GET and therefore
+    naturally idempotent; no idempotency key, header or retention window is offered, and none is needed,
+    because there is no anonymous write surface to double-fire. NO Idempotency pointer is emitted in
+    apis.yml — emitting one would credit Impossible Metals with a safety mechanism it does not publish.
+dry_run_mode:
+  supported: na
+  note: Read-only public surface; there is nothing to rehearse.
+reversibility:
+  applicable: false
+  grade: na
+  write_surface: none
+  note: >-
+    The public surface is read-only. Every operation profiled in this repo is a GET, so no action taken
+    through it can need taking back: there is no create, no update, no delete, no cancel, no refund and
+    no restore reachable without a WordPress site-administrator credential that Impossible Metals
+    publishes no process for a third party to obtain. Reversibility, dry-run and idempotency are all
+    honestly `na` here rather than zero. Write methods (POST/PUT/DELETE) do exist on the same routes
+    behind Application Passwords, and WordPress does keep post revisions and a Trash state — but
+    Impossible Metals documents no window, no policy and no retention period for either, so no
+    reversal window is asserted.
+  surfaces: []
+cross_links:
+  errors: errors/impossible-metals-problem-types.yml
+  lifecycle: lifecycle/impossible-metals-lifecycle.yml
+  authentication: authentication/impossible-metals-authentication.yml
+  rate_limits: rate-limits/impossible-metals-rate-limits.yml
+  conformance: conformance/impossible-metals-conformance.yml

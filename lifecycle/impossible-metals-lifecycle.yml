@@ -1,0 +1,63 @@
+generated: '2026-08-23'
+method: probed
+source: >-
+  Live probes of impossiblemetals.com on 2026-08-23 + the site's own route index. Impossible Metals
+  publishes no versioning policy, no deprecation policy, no SLA, no status page and no API changelog —
+  each absence below was checked, not assumed.
+versioning:
+  scheme: path-namespace
+  current: wp/v2
+  stated_policy: false
+  note: >-
+    Versions are WordPress and plugin namespaces, not Impossible Metals product versions. The company
+    makes no statement about how or whether it will version this surface, because it does not present it
+    as an API at all.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  probed: >-
+    No Sunset or Deprecation response header was present on any of the routes probed on 2026-08-23.
+    No deprecation policy page exists on the site.
+  deprecated_operations: []
+  observed_transition:
+    from: /wp-json/tribe/events/v1/
+    to: /wp-json/tec/v1/
+    note: >-
+      Two generations of the events API are served side by side. The newer /tec/v1/ surface publishes an
+      OpenAPI 3.0.4 document but rejects anonymous calls as experimental; the older /tribe/events/v1/
+      surface is live and callable. Neither carries a Sunset or Deprecation header, and nothing on the
+      site says which one a consumer should build against — this is an undeclared migration in progress,
+      not a documented deprecation. NO Deprecation pointer is emitted in apis.yml, because Impossible
+      Metals publishes no deprecation policy.
+status_page:
+  published: false
+  probed:
+  - {url: 'https://status.impossiblemetals.com/', result: does-not-resolve}
+  note: >-
+    No status page of any kind. NO StatusPage pointer is emitted in apis.yml. Uptime signalling for this
+    surface is whatever Cloudflare and the WordPress host provide, which is nothing a consumer can read.
+sla:
+  published: false
+  note: No SLA, no uptime commitment, no support tier. There is no commercial relationship to attach one to.
+support:
+  channel: https://impossiblemetals.com/contact/
+  type: general corporate contact form
+  note: There is no developer support channel, no forum, no issue tracker and no support email for the API surface.
+changelog:
+  api_changelog_published: false
+  probed:
+  - {url: 'https://impossiblemetals.com/changelog/', status: 404}
+  note: >-
+    No API changelog. The company does publish a dated corporate blog and press-release archive
+    (https://impossiblemetals.com/news/blog/, 247 posts at capture), but it covers the Eureka programme,
+    policy and partnerships — not this surface. No ChangeLog artifact is emitted, because a corporate
+    news feed is not an API changelog.
+maturity:
+  assessment: incidental
+  note: >-
+    This is a corporate website's content API, exposed by default by WordPress and its plugins, not a
+    product Impossible Metals maintains, versions, supports or has ever announced. It is stable in
+    practice because WordPress core is stable, and it could change or close at any time with no notice
+    to anyone, because nobody at the company is tracking that it exists.

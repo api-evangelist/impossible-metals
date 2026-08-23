@@ -1,0 +1,35 @@
+generated: '2026-08-23'
+method: probed
+source: >-
+  Live anonymous probes of https://impossiblemetals.com/wp-json/* on 2026-08-23, reading full response
+  headers on every request. Impossible Metals publishes no rate-limit documentation — there is no
+  developer portal to publish it on.
+limit_count: 0
+documented: false
+headers_returned: []
+status_on_exhaustion: null
+retry_after: false
+note: >-
+  Honest zero. No published limits, and no runtime signal either: not one of X-RateLimit-Limit,
+  X-RateLimit-Remaining, X-RateLimit-Reset, RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset or
+  Retry-After appeared on any response across ~60 probes covering every collection route, the API root,
+  the oEmbed provider and both events surfaces. No 429 was produced. An agent calling this surface has no
+  way to know how much headroom it has, and will discover any limit only by being cut off.
+observed_headers:
+- {name: X-WP-Total, meaning: 'Pagination, not rate limiting.'}
+- {name: X-WP-TotalPages, meaning: 'Pagination, not rate limiting.'}
+- {name: cache-control, observed: 'max-age=172800 on /wp/v2/posts'}
+- {name: cf-cache-status, observed: 'HIT / BYPASS'}
+- {name: cf-ray, meaning: Cloudflare edge request id.}
+enforcement:
+  layer: cloudflare
+  observed: >-
+    Responses are served through Cloudflare with cf-edge-cache "cache,platform=wordpress". Cloudflare's
+    default bot and WAF policy is the only throttling actually in evidence: HTTP OPTIONS requests sent
+    without a browser User-Agent were answered 403, and the same requests sent with one were answered
+    200. That is a bot rule, not a documented rate limit, and it is undocumented, unversioned and can
+    change without notice.
+  advice: >-
+    Send a real, identifying User-Agent, honour cache-control, and back off exponentially on any 403 or
+    5xx. Do not assume a published budget exists — none does.
+per_scope: []

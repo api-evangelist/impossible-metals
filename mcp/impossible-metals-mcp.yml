@@ -1,0 +1,100 @@
+generated: '2026-08-23'
+method: derived
+status: candidate
+source: openapi/ (19 anonymous read operations across 8 derived specs + 1 published events spec)
+description: >-
+  Impossible Metals operates no MCP server. Searched on 2026-08-23: the company site and its 269-route
+  WordPress REST index, https://impossiblemetals.com/mcp (404), /.well-known/mcp.json (404),
+  mcp.impossiblemetals.com (does not resolve), the npm registry and PyPI. Nothing. The tool list below
+  is a CANDIDATE derived one-to-one from the OpenAPI operations in this repo — it is what an MCP server
+  over this surface would expose, not something Impossible Metals publishes. Every tool is read-only,
+  because the whole anonymously reachable surface is read-only.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  note: >-
+    mode is `none` because nobody ships a server — neither a remote endpoint nor a stdio package. The
+    `auth: none` describes the underlying HTTP surface these candidate tools would call, which needs no
+    credentials.
+server:
+  name: impossible-metals
+  transport: null
+  url: null
+  published: false
+auth:
+  required: false
+  note: All listed tools work anonymously over plain HTTPS against https://impossiblemetals.com/wp-json.
+tools:
+- name: search_impossible_metals
+  description: Search every published object on impossiblemetals.com — posts, pages, FAQ entries, events
+  source_operation: openapi/impossible-metals-search-openapi.yml#search
+- name: list_posts
+  description: List Impossible Metals blog posts, press releases and congressional testimony
+  source_operation: openapi/impossible-metals-posts-openapi.yml#listPosts
+- name: get_post
+  description: Retrieve a single post by id
+  source_operation: openapi/impossible-metals-posts-openapi.yml#getPost
+- name: list_pages
+  description: List the technology, sustainability, about and policy pages
+  source_operation: openapi/impossible-metals-pages-openapi.yml#listPages
+- name: get_page
+  description: Retrieve a single page by id
+  source_operation: openapi/impossible-metals-pages-openapi.yml#getPage
+- name: list_faqs
+  description: List the 141 published FAQ entries on deep-sea mining, the Eureka AUV, environmental impact and regulation
+  source_operation: openapi/impossible-metals-faq-openapi.yml#listFaqs
+- name: get_faq
+  description: Retrieve a single FAQ entry by id
+  source_operation: openapi/impossible-metals-faq-openapi.yml#getFaq
+- name: list_faq_categories
+  description: List the faq_category taxonomy terms that group the FAQ knowledge base
+  source_operation: openapi/impossible-metals-faq-openapi.yml#listFaqCategories
+- name: get_faq_category
+  description: Retrieve a single FAQ category term by id
+  source_operation: openapi/impossible-metals-faq-openapi.yml#getFaqCategory
+- name: list_media
+  description: List media library attachments — Eureka vehicle photography, seabed imagery, diagrams and report PDFs
+  source_operation: openapi/impossible-metals-media-openapi.yml#listMedia
+- name: get_media_item
+  description: Retrieve a single media attachment by id
+  source_operation: openapi/impossible-metals-media-openapi.yml#getMediaItem
+- name: list_categories
+  description: List the post category vocabulary
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#listCategories
+- name: get_category
+  description: Retrieve a single category term by id
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#getCategory
+- name: list_tags
+  description: List the post tag vocabulary
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#listTags
+- name: get_tag
+  description: Retrieve a single tag term by id
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#getTag
+- name: list_post_types
+  description: List every registered post type and its REST base
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#listTypes
+- name: list_taxonomies
+  description: List every registered taxonomy and its REST base
+  source_operation: openapi/impossible-metals-taxonomy-openapi.yml#listTaxonomies
+- name: list_authors
+  description: List the authors of published Impossible Metals content
+  source_operation: openapi/impossible-metals-discovery-openapi.yml#listAuthors
+- name: get_api_root
+  description: Retrieve the REST API root — site identity, namespaces, the full route index and the advertised auth mechanism
+  source_operation: openapi/impossible-metals-discovery-openapi.yml#getApiRoot
+- name: list_events
+  description: List Impossible Metals events, conference appearances and webinars
+  source_operation: openapi/impossible-metals-events-openapi.yml#GET /events
+- name: list_event_venues
+  description: List the venues attached to Impossible Metals events (40 at capture)
+  source_operation: openapi/impossible-metals-events-openapi.yml#GET /venues
+- name: list_event_organizers
+  description: List the organizers attached to Impossible Metals events (22 at capture)
+  source_operation: openapi/impossible-metals-events-openapi.yml#GET /organizers
+- name: get_oembed
+  description: Retrieve the oEmbed response for a URL on impossiblemetals.com
+  source_operation: openapi/impossible-metals-oembed-openapi.yml#getOembed

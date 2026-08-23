@@ -1,0 +1,49 @@
+generated: '2026-08-23'
+method: probed
+source: live probes of https://impossiblemetals.com/.well-known/* and https://www.impossiblemetals.com/.well-known/*
+hit_count: 0
+note: >-
+  Zero hits. Every /.well-known/ path on both hosts returned a real HTTP 404 carrying the site's own
+  Avada 404 page — a genuine absence, not a soft-200 SPA shell and not a detection failure.
+  impossiblemetals.com serves no RFC 8615 discovery surface of any kind: no security.txt, no
+  api-catalog, no OAuth or OpenID metadata, no ai-plugin.json, and no A2A agent card at either the
+  current /.well-known/agent-card.json path or the legacy /.well-known/agent.json path. Because every
+  probe missed, NO WellKnown, SecurityTxt or AgentCard pointer is emitted in apis.yml — a pointer
+  would assert that the provider serves a surface it does not serve. There is only one origin to
+  probe: the website, the content API and the two published OpenAPI documents are all on
+  impossiblemetals.com, and every candidate developer subdomain fails to resolve.
+hosts:
+- host: impossiblemetals.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+- host: www.impossiblemetals.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/openid-configuration, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/oauth-authorization-server, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/oauth-protected-resource, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/api-catalog, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/ai-plugin.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/agent-card.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+  - {path: /.well-known/agent.json, status: 404, content_type: 'text/html; charset=UTF-8', file: null}
+related_probes:
+- {path: /llms.txt, status: 404, note: 'No provider-published llms.txt; a generated one is in llms/.'}
+- {path: /robots.txt, status: 200, note: 'Two rules — Disallow /wp-admin/, Allow /wp-admin/admin-ajax.php — and a sitemap pointer to /wp-sitemap.xml. Nothing in this pass was blocked by robots.'}
+- {path: /openapi.json, status: 404, note: 'No spec at the host root. The two real OpenAPI documents are published inside the REST API itself, at /wp-json/tec/v1/docs and /wp-json/tribe/events/v1/doc.'}
+- {path: /swagger.json, status: 404}
+- {path: /api-docs, status: 404}
+- {path: /graphql, status: 404, note: No GraphQL surface.}
+- {path: /mcp, status: 404, note: No MCP endpoint.}
+- {path: /apis.json, status: 404}
+subdomains_checked:
+- {host: api.impossiblemetals.com, dns: does-not-resolve}
+- {host: docs.impossiblemetals.com, dns: does-not-resolve}
+- {host: developer.impossiblemetals.com, dns: does-not-resolve}
+- {host: data.impossiblemetals.com, dns: does-not-resolve}
