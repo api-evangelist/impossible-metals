@@ -18,6 +18,18 @@ description: >-
   on that same host, which are captured here for discovery purposes and are anonymously readable
   and read-only.
 url: https://raw.githubusercontent.com/api-evangelist/impossible-metals/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://impossiblemetals.com/wp-content/uploads/2022/09/ImpossibleMetals_logo_REVERSE_RGB.svg
 accessModel:
   pricing: none
