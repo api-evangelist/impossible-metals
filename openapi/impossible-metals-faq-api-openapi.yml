@@ -1,0 +1,561 @@
+openapi: 3.2.0
+info:
+  title: Impossible Metals FAQ API
+  version: wp/v2
+  description: 'Public, unauthenticated read access to the Impossible Metals frequently-asked-questions knowledge base — 141 published FAQ entries across 11 FAQ categories at capture on 2026-08-23 — exposed as the `avada_faq` custom post type and the `faq_category` taxonomy. This is the largest genuinely Impossible-Metals-specific resource on the surface: it is the company''s own written position on deep-sea mining, nodule collection, environmental impact and regulation, in structured form.'
+  contact:
+    name: Impossible Metals
+    url: https://impossiblemetals.com/contact/
+  x-derived-from: https://impossiblemetals.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Impossible Metals publishes no developer program. This document describes the anonymously readable WordPress REST content API served from impossiblemetals.com. Every path, parameter and schema was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing is invented.
+servers:
+- url: https://impossiblemetals.com/wp-json
+  description: Impossible Metals WordPress REST API
+tags:
+- name: FAQ
+  description: Frequently asked questions about deep-sea mineral collection, the Eureka AUV, environmental impact and regulation.
+paths:
+  /wp/v2/avada_faq:
+    get:
+      operationId: listFaqs
+      summary: List FAQ entries
+      description: Retrieve a paginated collection of published FAQ entries. 141 entries were live at capture.
+      tags:
+      - FAQ
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: page
+        in: query
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Limit response to posts published after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_after
+        in: query
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: author
+        in: query
+        description: Limit result set to posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: author_exclude
+        in: query
+        description: Ensure result set excludes posts assigned to specific authors.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: before
+        in: query
+        description: Limit response to posts published before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified_before
+        in: query
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+        schema:
+          type: string
+          format: date-time
+      - name: exclude
+        in: query
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: include
+        in: query
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          default: []
+          items:
+            type: integer
+      - name: menu_order
+        in: query
+        description: Limit result set to posts with a specific menu_order value.
+        schema:
+          type: integer
+      - name: search_semantics
+        in: query
+        description: How to interpret the search input.
+        schema:
+          type: string
+          enum:
+          - exact
+      - name: offset
+        in: query
+        description: Offset the result set by a specific number of items.
+        schema:
+          type: integer
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: orderby
+        in: query
+        description: Sort collection by post attribute.
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          - menu_order
+          default: date
+      - name: search_columns
+        in: query
+        description: Array of column names to be searched.
+        schema:
+          type: array
+          default: []
+          items:
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+            type: string
+      - name: slug
+        in: query
+        description: Limit result set to posts with one or more specific slugs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: status
+        in: query
+        description: Limit result set to posts assigned one or more statuses.
+        schema:
+          type: array
+          default: publish
+          items:
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - tribe-ea-success
+            - tribe-ea-failed
+            - tribe-ea-schedule
+            - tribe-ea-pending
+            - tribe-ea-draft
+            - tribe-ignored
+            - any
+            type: string
+      - name: tax_relation
+        in: query
+        description: Limit result set based on relationship between multiple taxonomies.
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+      - name: faq_category
+        in: query
+        description: Limit result set to items with specific terms assigned in the faq_category taxonomy.
+        schema:
+          type: object
+      - name: faq_category_exclude
+        in: query
+        description: Limit result set to items except those with specific terms assigned in the faq_category taxonomy.
+        schema:
+          type: object
+      - name: format
+        in: query
+        description: Limit result set to items assigned one or more given formats.
+        schema:
+          type: array
+          items:
+            enum:
+            - standard
+            - aside
+            - chat
+            - gallery
+            - link
+            - image
+            - quote
+            - status
+            - video
+            - audio
+            type: string
+      responses:
+        '200':
+          description: List FAQ entries — success.
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the requested per_page size.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (rel="next" / rel="prev").
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvadaFaq'
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404':
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+  /wp/v2/avada_faq/{id}:
+    get:
+      operationId: getFaq
+      summary: Get an FAQ entry
+      description: Retrieve a single published FAQ entry by its numeric identifier.
+      tags:
+      - FAQ
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+        required: true
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: excerpt_length
+        in: query
+        description: Override the default excerpt length.
+        schema:
+          type: integer
+      - name: password
+        in: query
+        description: The password for the post if it is password protected.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get an FAQ entry — success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404':
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+components:
+  schemas:
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.
+    AvadaFaq:
+      type: object
+      properties:
+        date:
+          type: string
+          description: The date the post was published, in the site's timezone.
+          format: date-time
+        date_gmt:
+          type: string
+          description: The date the post was published, as GMT.
+          format: date-time
+        guid:
+          type: object
+          description: The globally unique identifier for the post.
+          readOnly: true
+          properties:
+            raw:
+              type: string
+              description: GUID for the post, as it exists in the database.
+              readOnly: true
+            rendered:
+              type: string
+              description: GUID for the post, transformed for display.
+              readOnly: true
+        id:
+          type: integer
+          description: Unique identifier for the post.
+          readOnly: true
+        link:
+          type: string
+          description: URL to the post.
+          format: uri
+          readOnly: true
+        modified:
+          type: string
+          description: The date the post was last modified, in the site's timezone.
+          format: date-time
+          readOnly: true
+        modified_gmt:
+          type: string
+          description: The date the post was last modified, as GMT.
+          format: date-time
+          readOnly: true
+        slug:
+          type: string
+          description: An alphanumeric identifier for the post unique to its type.
+        status:
+          type: string
+          description: A named status for the post.
+          enum:
+          - publish
+          - future
+          - draft
+          - pending
+          - private
+          - tribe-ea-success
+          - tribe-ea-failed
+          - tribe-ea-schedule
+          - tribe-ea-pending
+          - tribe-ea-draft
+          - tribe-ignored
+        type:
+          type: string
+          description: Type of post.
+          readOnly: true
+        password:
+          type: string
+          description: A password to protect access to the content and excerpt.
+        permalink_template:
+          type: string
+          description: Permalink template for the post.
+          readOnly: true
+        generated_slug:
+          type: string
+          description: Slug automatically generated from the post title.
+          readOnly: true
+        class_list:
+          type: array
+          description: An array of the class names for the post container element.
+          readOnly: true
+          items:
+            type: string
+        title:
+          type: object
+          description: The title for the post.
+          properties:
+            raw:
+              type: string
+              description: Title for the post, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML title for the post, transformed for display.
+              readOnly: true
+        content:
+          type: object
+          description: The content for the post.
+          properties:
+            raw:
+              type: string
+              description: Content for the post, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML content for the post, transformed for display.
+              readOnly: true
+            block_version:
+              type: integer
+              description: Version of the content block format used by the post.
+              readOnly: true
+            protected:
+              type: boolean
+              description: Whether the content is protected with a password.
+              readOnly: true
+        author:
+          type: integer
+          description: The ID for the author of the post.
+        excerpt:
+          type: object
+          description: The excerpt for the post.
+          properties:
+            raw:
+              type: string
+              description: Excerpt for the post, as it exists in the database.
+            rendered:
+              type: string
+              description: HTML excerpt for the post, transformed for display.
+              readOnly: true
+            protected:
+              type: boolean
+              description: Whether the excerpt is protected with a password.
+              readOnly: true
+        featured_media:
+          type: integer
+          description: The ID of the featured media for the post.
+        comment_status:
+          type: string
+          description: Whether or not comments are open on the post.
+          enum:
+          - open
+          - closed
+        ping_status:
+          type: string
+          description: Whether or not the post can be pinged.
+          enum:
+          - open
+          - closed
+        menu_order:
+          type: integer
+          description: The order of the post in relation to other posts.
+        format:
+          type: string
+          description: The format for the post.
+          enum:
+          - standard
+          - aside
+          - chat
+          - gallery
+          - link
+          - image
+          - quote
+          - status
+          - video
+          - audio
+        meta:
+          type: object
+          description: Meta fields.
+          properties:
+            inline_featured_image:
+              type: boolean
+            footnotes:
+              type: string
+        template:
+          type: string
+          description: The theme file to use to display the post.
+        faq_category:
+          type: array
+          description: The terms assigned to the post in the faq_category taxonomy.
+          items:
+            type: integer

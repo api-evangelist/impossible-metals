@@ -1,0 +1,183 @@
+openapi: 3.2.0
+info:
+  title: Impossible Metals Discovery API
+  version: wp/v2
+  description: 'Public, unauthenticated discovery surface for the impossiblemetals.com WordPress REST API: the API root, which enumerates all 269 routes across 23 namespaces along with site identity and the supported authentication mechanism, plus the published author and post-status vocabularies.'
+  contact:
+    name: Impossible Metals
+    url: https://impossiblemetals.com/contact/
+  x-derived-from: https://impossiblemetals.com/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-23'
+  x-api-evangelist-note: Third-party profile. Impossible Metals publishes no developer program. This document describes the anonymously readable WordPress REST content API served from impossiblemetals.com. Every path, parameter and schema was read from the server's own published route index and OPTIONS documents on 2026-08-23 — nothing is invented.
+servers:
+- url: https://impossiblemetals.com/wp-json
+  description: Impossible Metals WordPress REST API
+tags:
+- name: Discovery
+  description: API root, route index, authentication advertisement and site identity.
+paths:
+  /:
+    get:
+      operationId: getApiRoot
+      summary: Get the API root
+      description: 'Retrieve the WordPress REST API root document: site name and description, namespaces, the full route index with per-route arguments, and the advertised authentication mechanism.'
+      tags:
+      - Discovery
+      parameters:
+      - name: context
+        in: query
+        description: The context parameter.
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Get the API root — success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404':
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List post statuses
+      description: Retrieve the publicly visible post statuses.
+      tags:
+      - Discovery
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: List post statuses — success.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '400':
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidParam:
+                  value:
+                    code: rest_invalid_param
+                    message: 'Invalid parameter(s): per_page'
+                    data:
+                      status: 400
+                      params:
+                        per_page: per_page must be between 1 (inclusive) and 100 (inclusive)
+        '404':
+          description: WordPress REST error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+              examples:
+                invalidId:
+                  value:
+                    code: rest_post_invalid_id
+                    message: Invalid post ID.
+                    data:
+                      status: 404
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The title for the status.
+          readOnly: true
+        private:
+          type: boolean
+          description: Whether posts with this status should be private.
+          readOnly: true
+        protected:
+          type: boolean
+          description: Whether posts with this status should be protected.
+          readOnly: true
+        public:
+          type: boolean
+          description: Whether posts of this status should be shown in the front end of the site.
+          readOnly: true
+        queryable:
+          type: boolean
+          description: Whether posts with this status should be publicly-queryable.
+          readOnly: true
+        show_in_list:
+          type: boolean
+          description: Whether to include posts in the edit listing for their post type.
+          readOnly: true
+        slug:
+          type: string
+          description: An alphanumeric identifier for the status.
+          readOnly: true
+        date_floating:
+          type: boolean
+          description: Whether posts of this status may have floating published dates.
+          readOnly: true
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.

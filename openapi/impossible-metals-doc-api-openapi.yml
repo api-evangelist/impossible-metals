@@ -1,0 +1,19 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Events Calendar REST Doc API
+  description: The Events Calendar REST API allows accessing upcoming events information easily and conveniently.
+  x-api-evangelist-note: 'Published verbatim by the site itself at https://impossiblemetals.com/wp-json/tribe/events/v1/doc (HTTP 200, application/json, 2026-08-23). Content is unchanged; only the serialization was converted from JSON to YAML. The verbatim JSON is kept at openapi/_original/impossible-metals-tribe-events-v1-openapi.json. OWNERSHIP: servers[] names https://impossiblemetals.com/wp-json/tribe/events/v1/ — the document is generated and served by Impossible Metals'' own host and describes Impossible Metals'' own event, venue and organizer records. info.contact is absent here; the sibling tec/v1 document names The Events Calendar (StellarWP) because the WordPress plugin generates the description, exactly as a self-hosted/templated server does.'
+  x-captured-on: '2026-08-23'
+servers:
+- url: https://impossiblemetals.com/wp-json/tribe/events/v1/
+tags:
+- name: Doc
+paths:
+  /doc:
+    get:
+      responses:
+        '200':
+          description: Returns the documentation for The Events Calendar REST API in Swagger consumable format.
+      tags:
+      - Doc
