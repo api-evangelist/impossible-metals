@@ -1,0 +1,21 @@
+{
+  "repo": "impossible-metals",
+  "feeds": [
+    {
+      "source": "https://impossiblemetals.com/",
+      "feed_url": "https://impossiblemetals.com/feed/",
+      "title": "",
+      "saved": 1,
+      "method": "discovered"
+    },
+    {
+      "source": "https://impossiblemetals.com/news/blog/",
+      "feed_url": "https://impossiblemetals.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 1,
+  "fetched": "2026-08-30T22:33:40Z"
+}

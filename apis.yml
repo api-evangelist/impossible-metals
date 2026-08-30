@@ -60,6 +60,19 @@ tags:
 - Sustainability
 - Climate Tech
 - Content
+- Event
+tags_raw:
+- Company
+- Deep Sea Mining
+- Critical Minerals
+- Battery Metals
+- Robotics
+- Autonomous Underwater Vehicles
+- Ocean Technology
+- Mining
+- Sustainability
+- Climate Tech
+- Content
 - Events
 apis:
 - aid: impossible-metals:impossible-metals-authors-api
@@ -188,6 +201,8 @@ apis:
   humanURL: https://impossiblemetals.com/news/blog/
   baseURL: https://impossiblemetals.com/wp-json
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
