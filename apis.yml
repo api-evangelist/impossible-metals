@@ -319,30 +319,6 @@ apis:
     url: lifecycle/impossible-metals-lifecycle.yml
   - type: RateLimits
     url: rate-limits/impossible-metals-rate-limits.yml
-- aid: impossible-metals:impossible-metals-oembed-api
-  name: Impossible Metals O Embed API
-  description: oEmbed 1.0 provider endpoint.
-  humanURL: https://impossiblemetals.com/news/blog/
-  baseURL: https://impossiblemetals.com/wp-json
-  tags:
-  - oEmbed
-  properties:
-  - type: OpenAPI
-    url: openapi/impossible-metals-oembed-api-openapi.yml
-  - type: Authentication
-    url: authentication/impossible-metals-authentication.yml
-  - type: ErrorCatalog
-    url: errors/impossible-metals-problem-types.yml
-  - type: Conventions
-    url: conventions/impossible-metals-conventions.yml
-  - type: DataModel
-    url: data-model/impossible-metals-data-model.yml
-  - type: Conformance
-    url: conformance/impossible-metals-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/impossible-metals-lifecycle.yml
-  - type: RateLimits
-    url: rate-limits/impossible-metals-rate-limits.yml
 - aid: impossible-metals:impossible-metals-organizers-api
   name: Impossible Metals Organizers API
   description: The Organizers API from Impossible Metals — 3 operation(s) for organizers.
@@ -499,6 +475,30 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/impossible-metals-venues-api-openapi.yml
+  - type: Authentication
+    url: authentication/impossible-metals-authentication.yml
+  - type: ErrorCatalog
+    url: errors/impossible-metals-problem-types.yml
+  - type: Conventions
+    url: conventions/impossible-metals-conventions.yml
+  - type: DataModel
+    url: data-model/impossible-metals-data-model.yml
+  - type: Conformance
+    url: conformance/impossible-metals-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/impossible-metals-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/impossible-metals-rate-limits.yml
+- aid: impossible-metals:impossible-metals-o-embed-api
+  name: Impossible Metals o Embed API
+  description: oEmbed 1.0 provider endpoint.
+  humanURL: https://impossiblemetals.com/news/blog/
+  baseURL: https://impossiblemetals.com/wp-json
+  tags:
+  - o Embed
+  properties:
+  - type: OpenAPI
+    url: openapi/impossible-metals-o-embed-api-openapi.yml
   - type: Authentication
     url: authentication/impossible-metals-authentication.yml
   - type: ErrorCatalog
