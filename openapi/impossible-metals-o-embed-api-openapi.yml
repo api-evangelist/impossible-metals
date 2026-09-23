@@ -13,7 +13,7 @@ servers:
 - url: https://impossiblemetals.com/wp-json
   description: Impossible Metals WordPress REST API
 tags:
-- name: oEmbed
+- name: o Embed
   description: oEmbed 1.0 provider endpoint.
 paths:
   /oembed/1.0/embed:
@@ -22,7 +22,7 @@ paths:
       summary: Get an oEmbed response
       description: Retrieve the oEmbed response for a URL on impossiblemetals.com.
       tags:
-      - oEmbed
+      - o Embed
       parameters:
       - name: url
         in: query

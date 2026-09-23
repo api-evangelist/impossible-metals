@@ -373,29 +373,6 @@ paths:
                       status: 404
 components:
   schemas:
-    RestError:
-      type: object
-      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
-      required:
-      - code
-      - message
-      - data
-      properties:
-        code:
-          type: string
-          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, present on rest_invalid_param.
     Post:
       type: object
       properties:
@@ -579,3 +556,26 @@ components:
           description: The terms assigned to the post in the post_tag taxonomy.
           items:
             type: integer
+    RestError:
+      type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
+      properties:
+        code:
+          type: string
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.

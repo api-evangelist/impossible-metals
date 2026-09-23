@@ -1,20 +1,18 @@
 {
   "provider": "impossible-metals",
   "sources": [
-    "impossible-metals-discovery-openapi.yml",
-    "impossible-metals-events-openapi.yml",
-    "impossible-metals-events-tec-openapi.yml",
-    "impossible-metals-faq-openapi.yml",
-    "impossible-metals-media-openapi.yml",
-    "impossible-metals-oembed-openapi.yml",
-    "impossible-metals-pages-openapi.yml",
-    "impossible-metals-posts-openapi.yml",
-    "impossible-metals-search-openapi.yml",
-    "impossible-metals-taxonomy-openapi.yml"
+    "_original/impossible-metals-events-openapi.yml",
+    "_original/impossible-metals-events-tec-openapi.yml",
+    "_ae-authored/impossible-metals-discovery-openapi.yml",
+    "_ae-authored/impossible-metals-faq-openapi.yml",
+    "_ae-authored/impossible-metals-media-openapi.yml",
+    "_ae-authored/impossible-metals-oembed-openapi.yml",
+    "_ae-authored/impossible-metals-pages-openapi.yml",
+    "_ae-authored/impossible-metals-posts-openapi.yml",
+    "_ae-authored/impossible-metals-search-openapi.yml",
+    "_ae-authored/impossible-metals-taxonomy-openapi.yml"
   ],
   "outputs": [
-    "impossible-metals-authors-api-openapi.yml",
-    "impossible-metals-discovery-api-openapi.yml",
     "impossible-metals-categories-api-openapi.yml",
     "impossible-metals-doc-api-openapi.yml",
     "impossible-metals-events-api-openapi.yml",
@@ -23,6 +21,8 @@
     "impossible-metals-venues-api-openapi.yml",
     "impossible-metals-common-api-openapi.yml",
     "impossible-metals-events-pro-api-openapi.yml",
+    "impossible-metals-authors-api-openapi.yml",
+    "impossible-metals-discovery-api-openapi.yml",
     "impossible-metals-faq-api-openapi.yml",
     "impossible-metals-faq-categories-api-openapi.yml",
     "impossible-metals-media-api-openapi.yml",
@@ -33,21 +33,13 @@
     "impossible-metals-taxonomy-api-openapi.yml"
   ],
   "archived": [
-    "archived openapi/impossible-metals-discovery-openapi.yml",
-    "archived openapi/impossible-metals-events-openapi.yml",
-    "archived openapi/impossible-metals-events-tec-openapi.yml",
-    "archived openapi/impossible-metals-faq-openapi.yml",
-    "archived openapi/impossible-metals-media-openapi.yml",
-    "archived openapi/impossible-metals-oembed-openapi.yml",
-    "archived openapi/impossible-metals-pages-openapi.yml",
-    "archived openapi/impossible-metals-posts-openapi.yml",
-    "archived openapi/impossible-metals-search-openapi.yml",
-    "archived openapi/impossible-metals-taxonomy-openapi.yml"
+    "deleted 1 superseded output(s) from the previous generation"
   ],
   "errors": [],
   "warnings": [],
   "notes": [
-    "impossible-metals-discovery-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "2 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "impossible-metals-events-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "impossible-metals-events-openapi.yml: tagged paths GET /doc -> Doc",
     "impossible-metals-events-openapi.yml: tagged paths GET /events -> Events",
@@ -86,6 +78,7 @@
     "impossible-metals-events-openapi.yml: declared missing tag: Tags",
     "impossible-metals-events-openapi.yml: declared missing tag: Venues",
     "impossible-metals-events-tec-openapi.yml: upgraded openapi 3.0.4 -> OpenAPI 3.2.0",
+    "impossible-metals-discovery-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "impossible-metals-faq-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "impossible-metals-media-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "impossible-metals-oembed-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
@@ -94,7 +87,29 @@
     "impossible-metals-search-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "impossible-metals-taxonomy-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "tag 'Events' spans 2 source specs (impossible-metals-events-openapi.yml, impossible-metals-events-tec-openapi.yml): per-path servers applied",
-    "apis.yml register: written (+18 apis, 18 total)"
+    "superseded outputs removed: impossible-metals-o-embed-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 18 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/impossible-metals-tribe-events-v1-openapi.json: archived document superseded by a larger archived document",
+    "_original/impossible-metals-tec-v1-openapi.json: archived document superseded by a larger archived document",
+    "impossible-metals-authors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-common-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-discovery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-doc-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-events-pro-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-faq-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-faq-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-media-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-o-embed-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-organizers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-posts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-taxonomy-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "impossible-metals-venues-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

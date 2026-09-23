@@ -17,3 +17,7 @@ paths:
           description: Returns the documentation for The Events Calendar REST API in Swagger consumable format.
       tags:
       - Doc
+      summary: Get doc
+      x-summary-source: derived
+      operationId: getDoc
+      x-operation-id-source: derived

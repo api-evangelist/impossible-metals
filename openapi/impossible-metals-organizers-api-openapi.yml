@@ -71,6 +71,10 @@ paths:
           description: The requested page was not found.
       tags:
       - Organizers
+      summary: Get organizers
+      x-summary-source: derived
+      operationId: getOrganizers
+      x-operation-id-source: derived
   /organizers/{id}:
     get:
       parameters:
@@ -95,6 +99,10 @@ paths:
           description: An organizer with the specified event does not exist.
       tags:
       - Organizers
+      summary: Get organizers by id
+      x-summary-source: derived
+      operationId: getOrganizersById
+      x-operation-id-source: derived
     post:
       parameters:
       - in: path
@@ -155,6 +163,10 @@ paths:
           description: The user is not authorized to create organizers
       tags:
       - Organizers
+      summary: Create organizers by id
+      x-summary-source: derived
+      operationId: postOrganizersById
+      x-operation-id-source: derived
     delete:
       parameters:
       - in: path
@@ -180,6 +192,10 @@ paths:
           description: The organizer with the specified ID could not be deleted.
       tags:
       - Organizers
+      summary: Delete organizers by id
+      x-summary-source: derived
+      operationId: deleteOrganizersById
+      x-operation-id-source: derived
   /organizers/by-slug/{slug}:
     get:
       parameters:
@@ -204,6 +220,10 @@ paths:
           description: An organizer with the specified event does not exist.
       tags:
       - Organizers
+      summary: Get organizers by slug by slug
+      x-summary-source: derived
+      operationId: getOrganizersBySlugBySlug
+      x-operation-id-source: derived
     post:
       parameters:
       - in: path
@@ -264,6 +284,10 @@ paths:
           description: The user is not authorized to create organizers
       tags:
       - Organizers
+      summary: Create organizers by slug by slug
+      x-summary-source: derived
+      operationId: postOrganizersBySlugBySlug
+      x-operation-id-source: derived
     delete:
       parameters:
       - in: path
@@ -289,6 +313,10 @@ paths:
           description: The organizer with the specified ID could not be deleted.
       tags:
       - Organizers
+      summary: Delete organizers by slug by slug
+      x-summary-source: derived
+      operationId: deleteOrganizersBySlugBySlug
+      x-operation-id-source: derived
 components:
   schemas:
     Image:
@@ -315,6 +343,22 @@ components:
           description: The details about each size available for the image
           items:
             $ref: '#/components/schemas/ImageSize'
+    ImageSize:
+      type: object
+      properties:
+        width:
+          type: integer
+          description: The image width in pixels in the specified size
+        height:
+          type: integer
+          description: The image height in pixels in the specified size
+        mime-type:
+          type: string
+          description: The image mime-type
+        url:
+          type: string
+          format: uri
+          description: The link to the image in the specified size on the site
     Organizer:
       type: object
       properties:
@@ -375,19 +419,3 @@ components:
         email:
           type: string
           description: The organizer email address
-    ImageSize:
-      type: object
-      properties:
-        width:
-          type: integer
-          description: The image width in pixels in the specified size
-        height:
-          type: integer
-          description: The image height in pixels in the specified size
-        mime-type:
-          type: string
-          description: The image mime-type
-        url:
-          type: string
-          format: uri
-          description: The link to the image in the specified size on the site

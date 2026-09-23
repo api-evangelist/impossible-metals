@@ -105,6 +105,10 @@ paths:
           description: The requested page was not found.
       tags:
       - Categories
+      summary: Get categories
+      x-summary-source: derived
+      operationId: getCategories
+      x-operation-id-source: derived
   /categories/{id}:
     get:
       parameters:
@@ -127,6 +131,10 @@ paths:
           description: An event category with the specified term ID does not exist.
       tags:
       - Categories
+      summary: Get categories by id
+      x-summary-source: derived
+      operationId: getCategoriesById
+      x-operation-id-source: derived
     post:
       parameters:
       - in: path
@@ -175,6 +183,10 @@ paths:
           description: The user is not authorized to create event categories
       tags:
       - Categories
+      summary: Create categories by id
+      x-summary-source: derived
+      operationId: postCategoriesById
+      x-operation-id-source: derived
     delete:
       parameters:
       - in: path
@@ -200,6 +212,10 @@ paths:
           description: The event category with the specified term ID could not be deleted.
       tags:
       - Categories
+      summary: Delete categories by id
+      x-summary-source: derived
+      operationId: deleteCategoriesById
+      x-operation-id-source: derived
 components:
   schemas:
     Term:

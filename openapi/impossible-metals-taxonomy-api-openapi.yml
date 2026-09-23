@@ -638,43 +638,29 @@ components:
           - contentOnly
           - false
           readOnly: true
-    Category:
+    RestError:
       type: object
+      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
+      required:
+      - code
+      - message
+      - data
       properties:
-        id:
-          type: integer
-          description: Unique identifier for the term.
-          readOnly: true
-        count:
-          type: integer
-          description: Number of published posts for the term.
-          readOnly: true
-        description:
+        code:
           type: string
-          description: HTML description of the term.
-        link:
+          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
+        message:
           type: string
-          description: URL of the term.
-          format: uri
-          readOnly: true
-        name:
-          type: string
-          description: HTML title for the term.
-        slug:
-          type: string
-          description: An alphanumeric identifier for the term unique to its type.
-        taxonomy:
-          type: string
-          description: Type attribution for the term.
-          enum:
-          - category
-          readOnly: true
-        parent:
-          type: integer
-          description: The parent term ID.
-        meta:
+          description: Human-readable message.
+        data:
           type: object
-          description: Meta fields.
+          properties:
+            status:
+              type: integer
+              description: HTTP status code.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on rest_invalid_param.
     Taxonomy:
       type: object
       properties:
@@ -743,6 +729,43 @@ components:
             show_in_quick_edit:
               type: boolean
               description: Whether to show the taxonomy in the quick/bulk edit panel.
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the term.
+          readOnly: true
+        count:
+          type: integer
+          description: Number of published posts for the term.
+          readOnly: true
+        description:
+          type: string
+          description: HTML description of the term.
+        link:
+          type: string
+          description: URL of the term.
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          description: HTML title for the term.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the term unique to its type.
+        taxonomy:
+          type: string
+          description: Type attribution for the term.
+          enum:
+          - category
+          readOnly: true
+        parent:
+          type: integer
+          description: The parent term ID.
+        meta:
+          type: object
+          description: Meta fields.
     Tag:
       type: object
       properties:
@@ -777,26 +800,3 @@ components:
         meta:
           type: object
           description: Meta fields.
-    RestError:
-      type: object
-      description: The WordPress REST API error envelope. Not RFC 9457 problem+json — it is served as application/json with a WordPress-specific code/message/data shape.
-      required:
-      - code
-      - message
-      - data
-      properties:
-        code:
-          type: string
-          description: Machine-readable WordPress error code, e.g. rest_post_invalid_id.
-        message:
-          type: string
-          description: Human-readable message.
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
-              description: HTTP status code.
-            params:
-              type: object
-              description: Per-parameter validation messages, present on rest_invalid_param.
